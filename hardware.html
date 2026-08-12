@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hardware &amp; preorder — arply</title>
+<meta name="description" content="Print your own housing for arply's ~€20 hardware, or reserve a ready-made unit with a €1 deposit." />
+<meta name="theme-color" content="#f7f8fb" />
+<meta property="og:title" content="Hardware & preorder — arply" />
+<meta property="og:description" content="Print your own housing for arply's ~€20 hardware, or reserve a ready-made unit with a €1 deposit." />
+<meta property="og:type" content="website" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23f7f8fb'/%3E%3Ctext x='16' y='23' font-family='Arial,Helvetica,sans-serif' font-size='21' font-weight='700' text-anchor='middle' fill='%2314151a'%3Ea%3C/text%3E%3C/svg%3E" />
+<link rel="preload" href="fonts/geist-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="fonts/geist-mono-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preconnect" href="https://unpkg.com" crossorigin />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="wordmark" href="index.html#top">
+      <img class="wordmark-logo" src="assets/arply-logo.png" alt="arply" width="220" height="67" />
+    </a>
+    <div class="header-actions">
+      <nav class="site-nav">
+        <a href="hardware.html" aria-current="page">Hardware</a>
+        <a href="#quickstart">Quickstart</a>
+        <a href="#flash">Flash</a>
+        <a href="https://github.com/arply/arply" target="_blank" rel="noopener">GitHub</a>
+        <!-- TODO: point at your real GitHub repo URL once it's public -->
+      </nav>
+      <a class="btn btn-ghost" href="index.html#waitlist">Join the waitlist</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="wrap">
+    <div class="notice-banner" role="note">
+      <span class="notice-icon" aria-hidden="true">⚠️</span>
+      <p><strong>Not a certified product.</strong> arply hardware is not CE‑marked and hasn't undergone formal safety or regulatory certification. It's an open-source DIY kit for makers, hobbyists, students, and researchers — for private, non‑commercial use only. You build, flash, and operate it entirely at your own risk. See the <a href="preorder-terms.html">preorder terms</a> for the full disclaimer.</p>
+    </div>
+  </div>
+
+  <section class="hero wrap hardware-hero">
+    <p class="eyebrow">Hardware</p>
+    <h1 class="hero-title text-balance">Give arply a home.</h1>
+    <p class="hero-sub">arply runs on about €20 of hardware. Print a housing for it, flash it straight from your browser, or skip both and reserve a ready-made unit.</p>
+  </section>
+
+  <section class="section quickstart-section" id="quickstart" data-reveal>
+    <div class="wrap">
+      <p class="eyebrow">Quickstart</p>
+      <h2 class="section-title text-balance">From parts to AirPlay in five steps</h2>
+      <p class="section-text">The short version — a full written guide is coming soon. This covers what you need to get arply running.</p>
+
+      <ol class="steps-list">
+        <li class="step">
+          <span class="step-number">1</span>
+          <div class="step-body">
+            <h3>Get the parts</h3>
+            <p>A Seeed XIAO ESP32‑S3 and a PCM5102A DAC board — no wiring needed, about €20 total. Or skip this and reserve a ready-made unit below.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-number">2</span>
+          <div class="step-body">
+            <h3>Print the housing</h3>
+            <p>Download the STL/STEP files or find the project on Printables.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-number">3</span>
+          <div class="step-body">
+            <h3>Flash the firmware</h3>
+            <p>Plug the board in over USB and flash it straight from your browser — no software to install.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-number">4</span>
+          <div class="step-body">
+            <h3>Join it to Wi‑Fi</h3>
+            <p>Plug arply into USB power and it starts its own network, <code>arply-setup</code>. Connect to it — a setup page opens automatically, or open <a href="http://arply.local">arply.local</a> yourself. From there, connect it to your Wi‑Fi, give it a name, and configure it to your liking.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-number">5</span>
+          <div class="step-body">
+            <h3>Find it in AirPlay</h3>
+            <p>It shows up in the AirPlay menu on any iPhone, iPad, or Mac on the same network.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" data-reveal>
+    <div class="wrap">
+      <p class="eyebrow">Print it yourself</p>
+      <h2 class="section-title text-balance">3D-printable housing</h2>
+      <p class="section-text">A minimal enclosure sized for the board and speaker wiring arply needs. The design is open, like everything else in this project.</p>
+
+      <div class="file-row">
+        <div class="file-card">
+          <h3>STL / STEP files</h3>
+          <p>Direct download of the housing model, ready to slice.</p>
+          <a class="btn btn-primary is-disabled" href="#" aria-disabled="true" tabindex="-1">Coming soon</a>
+          <!-- TODO: replace with the real download once the file is ready,
+               e.g. href="assets/arply-housing.stl" and drop the is-disabled class -->
+        </div>
+        <div class="file-card">
+          <h3>Printables</h3>
+          <p>Browse the project page on Printables — remixes, print settings, and community photos.</p>
+          <a class="btn btn-ghost is-disabled" href="#" aria-disabled="true" tabindex="-1">Coming soon</a>
+          <!-- TODO: replace href with your printables.com project URL and drop the is-disabled class -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="flash" data-reveal>
+    <div class="wrap">
+      <p class="eyebrow">Set it up</p>
+      <h2 class="section-title text-balance">Flash the firmware</h2>
+      <p class="section-text">Flash arply straight from your browser over USB — no software to install. Works in Chrome or Edge on desktop.</p>
+
+      <div class="file-card flasher-card">
+        <h3>ESP32 web flasher</h3>
+        <p>Plug in your board and install the latest arply firmware in one click, powered by <a class="trust-link" href="https://esphome.github.io/esp-web-tools/" target="_blank" rel="noopener">ESP Web Tools</a>.</p>
+        <esp-web-install-button manifest="assets/firmware/manifest.json">
+          <button slot="activate" class="btn btn-primary is-disabled" disabled>Coming soon</button>
+          <span slot="unsupported">Web flashing needs Chrome or Edge on desktop.</span>
+          <span slot="not-allowed">Web flashing isn't available over this connection (needs HTTPS).</span>
+        </esp-web-install-button>
+        <!-- TODO: once firmware is built, add assets/firmware/manifest.json + the
+             compiled .bin(s) it points to, then remove `disabled`/`is-disabled`
+             from the activate button above. See https://esphome.github.io/esp-web-tools/ -->
+      </div>
+    </div>
+  </section>
+
+  <section class="section preorder-section" data-reveal>
+    <div class="wrap">
+      <p class="eyebrow">Don't want to print it?</p>
+      <h2 class="section-title text-balance">Reserve a ready-made unit</h2>
+      <p class="section-text">Put down a small deposit to reserve a pre-assembled arply, housing included. It comes off the final price when units ship.</p>
+
+      <div class="preorder-card">
+        <div class="preorder-price">
+          <span class="preorder-amount">€1</span>
+          <span class="preorder-label">reservation deposit, per unit</span>
+        </div>
+        <a class="btn btn-primary" href="#" target="_blank" rel="noopener">Reserve for €1</a>
+        <!-- TODO: point this at your Ko-fi (or Buy Me a Coffee) link,
+             e.g. href="https://ko-fi.com/yourname" -->
+        <p class="form-note">Deposits are refundable — see the <a href="preorder-terms.html">preorder terms</a> for withdrawal rights and the full product disclaimer.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <span class="wordmark small">
+        <img class="wordmark-logo" src="assets/arply-logo.png" alt="arply" width="220" height="67" />
+      </span>
+      <p class="footer-tagline">An unofficial, open-source AirPlay receiver.</p>
+    </div>
+    <nav class="footer-nav">
+      <a href="index.html#top">Home</a>
+      <a href="https://github.com/arply/arply" target="_blank" rel="noopener">GitHub</a>
+      <!-- TODO: point at your real GitHub repo URL once it's public -->
+      <a href="preorder-terms.html">Preorder terms</a>
+      <a href="impressum.html">Legal notice (Impressum)</a>
+    </nav>
+    <p class="footer-disclaimer">arply is an independent project and is not affiliated with, endorsed by, or sponsored by Apple Inc. AirPlay® is a registered trademark of Apple Inc., referenced here only to describe protocol compatibility.</p>
+    <p class="footer-copy">© 2026 arply · arply.de</p>
+  </div>
+</footer>
+
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
