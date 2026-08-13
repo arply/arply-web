@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>arply — der €20 Open-Source-AirPlay-2-Receiver</title>
+<meta name="description" content="arply verwandelt Hardware, die du schon besitzt, in einen AirPlay 2 Audio-Receiver für etwa 20 € an Teilen. Offen, nicht-kommerzielle Lizenz, keine Apple-Hardware, kein Abo, nichts in der Cloud." />
+<meta name="theme-color" content="#f7f8fb" />
+<meta property="og:title" content="arply — der €20 Open-Source-AirPlay-2-Receiver" />
+<meta property="og:description" content="Verwandle jeden Lautsprecher in ein AirPlay 2 Ziel für etwa 20 € an Teilen. Offen, nicht-kommerzielle Lizenz, nur lokales Netzwerk, nicht mit Apple verbunden." />
+<meta property="og:type" content="website" />
+<link rel="alternate" hreflang="en" href="https://arply.de/index.html" />
+<link rel="alternate" hreflang="de" href="https://arply.de/index.de.html" />
+<link rel="alternate" hreflang="x-default" href="https://arply.de/index.html" />
+<link rel="icon" type="image/png" href="assets/favicon.png?v=3" />
+<link rel="preload" href="fonts/geist-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="fonts/geist-mono-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="wordmark" href="#top">
+      <img class="wordmark-logo" src="assets/arply-logo.png" alt="arply" width="220" height="67" />
+    </a>
+    <div class="header-actions">
+      <nav class="site-nav" id="site-nav">
+        <a href="hardware.de.html#print-it-yourself">Hardware</a>
+        <a href="hardware.de.html#quickstart">Schnellstart</a>
+        <a href="hardware.de.html#flash">Flash</a>
+        <a href="https://github.com/arply/airplay-esp32-main" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <a class="btn btn-ghost" href="#waitlist">Warteliste beitreten</a>
+      <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Menü umschalten">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero wrap">
+    <p class="eyebrow">Früher Zugang</p>
+    <h1 class="hero-title text-balance">Jeder Lautsprecher.<br />Jetzt AirPlay‑fähig.</h1>
+    <p class="hero-sub">arply verwandelt Hardware, die du schon besitzt, in einen vollwertigen AirPlay&nbsp;2 Audio-Receiver — keine Apple-Hardware, kein Abo, nichts wird in die Cloud gesendet.</p>
+
+    <ul class="badge-row" aria-label="Highlights">
+      <li class="badge">Offen, nicht-kommerziell</li>
+      <li class="badge">~20 € an Teilen</li>
+      <li class="badge">Nur lokales Netzwerk</li>
+    </ul>
+
+    <form class="waitlist-form" novalidate>
+      <label class="sr-only" for="email">E-Mail-Adresse</label>
+      <input id="email" name="email" type="email" placeholder="du@beispiel.de" autocomplete="email" required />
+      <button class="btn btn-primary" type="submit">Benachrichtige mich</button>
+    </form>
+    <p class="form-note" id="waitlistNote" aria-live="polite">Eine E-Mail, sobald es fertig ist. Kein Spam, kein Newsletter.</p>
+
+    <div class="hero-visual" aria-hidden="true">
+      <canvas id="broadcast" width="960" height="360"></canvas>
+    </div>
+  </section>
+
+  <section class="section flow-section" data-reveal>
+    <div class="wrap grid-asym">
+      <div class="flow-intro">
+        <p class="eyebrow">So funktioniert's</p>
+        <h2 class="section-title text-balance">So bringt arply Audio zu deinem Lautsprecher</h2>
+        <p class="section-text">AirPlay ist ein Protokoll, kein Stück Hardware. arply spricht es fließend — so kann alles, was Audio abspielen kann, im AirPlay-Menü deiner Apple-Geräte auftauchen.</p>
+      </div>
+
+      <div class="flow-diagram">
+        <div class="flow-node">
+          <span class="flow-index">Quelle</span>
+          <h3>Dein Apple-Gerät</h3>
+          <p>iPhone, iPad oder Mac — Streaming über AirPlay&nbsp;2, genau wie gewohnt.</p>
+        </div>
+        <div class="flow-connector" aria-hidden="true"></div>
+        <div class="flow-node">
+          <span class="flow-index">Empfänger</span>
+          <h3>arply</h3>
+          <p>Läuft unauffällig in deinem Netzwerk, spricht AirPlay nativ, dekodiert zu sauberem PCM.</p>
+        </div>
+        <div class="flow-connector" aria-hidden="true"></div>
+        <div class="flow-node">
+          <span class="flow-index">Ausgabe</span>
+          <h3>Dein Lautsprecher</h3>
+          <p>Jeder DAC, Verstärker oder Aktivlautsprecher, den du schon hast.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section trust-section" data-reveal>
+    <div class="wrap">
+      <p class="eyebrow">Was arply anders macht</p>
+      <div class="trust-row">
+        <div class="trust-item">
+          <h3>Nur lokales Netzwerk</h3>
+          <p>Audio bleibt in deinem WLAN. Kein Konto, kein Cloud-Relay, keine Telemetrie, die nach Hause funkt.</p>
+        </div>
+        <div class="trust-item">
+          <h3>Nicht mit Apple verbunden</h3>
+          <p>Eine unabhängige, inoffizielle Umsetzung des AirPlay-Protokolls, gebaut von jemandem, der sich mehr AirPlay-fähige Lautsprecher gewünscht hat.</p>
+        </div>
+        <div class="trust-item">
+          <h3>Offen, nicht-kommerziell</h3>
+          <p>Ein kleiner, gut lesbarer Quellcode und ein offenes Hardware-Design — ansehen, nachbauen, verändern, einen Pull Request schicken. Frei für private und nicht-kommerzielle Nutzung; der Weiterverkauf braucht eine Genehmigung. Die Firmware steht unter einer <a class="trust-link" href="https://github.com/arply/airplay-esp32-main/blob/main/LICENSE" target="_blank" rel="noopener">Non-Commercial-Lizenz</a>, das Hardware-Design unter <a class="trust-link" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>.</p>
+          <a class="trust-link" href="https://github.com/arply/airplay-esp32-main" target="_blank" rel="noopener">Quellcode auf GitHub ansehen →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section closing-section" id="waitlist" data-reveal>
+    <div class="wrap closing-inner">
+      <h2 class="section-title text-balance">Sei der Erste, der es installiert.</h2>
+      <p class="section-text">arply befindet sich noch in der Entwicklung. Hinterlasse deine E-Mail-Adresse, und wir melden uns, sobald erste Builds bereit sind.</p>
+      <form class="waitlist-form" data-waitlist-secondary novalidate>
+        <label class="sr-only" for="email2">E-Mail-Adresse</label>
+        <input id="email2" name="email" type="email" placeholder="du@beispiel.de" autocomplete="email" required />
+        <button class="btn btn-primary" type="submit">Benachrichtige mich</button>
+      </form>
+      <p class="form-note" aria-live="polite">Eine E-Mail, sobald es fertig ist. Kein Spam, kein Newsletter.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <span class="wordmark small">
+        <img class="wordmark-logo" src="assets/arply-logo.png" alt="arply" width="220" height="67" />
+      </span>
+      <p class="footer-tagline">Ein inoffizieller, offener AirPlay-Receiver.</p>
+    </div>
+    <nav class="footer-nav">
+      <a href="hardware.de.html">Hardware &amp; Vorbestellung</a>
+      <a href="https://github.com/arply/airplay-esp32-main" target="_blank" rel="noopener">GitHub</a>
+      <a href="preorder-terms.html">Vorbestellungsbedingungen</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="mailto:info@arply.de">Kontakt</a>
+    </nav>
+    <p class="footer-disclaimer">arply ist ein unabhängiges Projekt und steht in keiner Verbindung zu Apple Inc., wird von Apple weder unterstützt noch gesponsert. AirPlay® ist eine eingetragene Marke von Apple Inc. und wird hier ausschließlich zur Beschreibung der Protokollkompatibilität verwendet.</p>
+    <p class="footer-copy">© 2026 arply · arply.de</p>
+    <p class="footer-lang"><a href="index.html" hreflang="en">English</a></p>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
