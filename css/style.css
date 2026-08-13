@@ -620,17 +620,12 @@ code {
   margin: 0.75rem 0 0;
 }
 
-.footer-lang {
-  margin: 0.75rem 0 0;
-}
-
-.footer-lang a {
-  font-size: 0.8rem;
+.footer-copy a {
   color: var(--ink-faint);
   text-decoration: underline;
 }
 
-.footer-lang a:hover { color: var(--ink); }
+.footer-copy a:hover { color: var(--ink); }
 
 /* ---------------------------------------------------------
    Hardware page — file cards & preorder
