@@ -180,6 +180,47 @@
   });
 
   /* -------------------------------------------------------
+     Mobile nav toggle
+  ------------------------------------------------------- */
+  var navToggle = document.querySelector(".nav-toggle");
+  var siteNav = document.getElementById("site-nav");
+  if (navToggle && siteNav) {
+    function closeNav() {
+      siteNav.classList.remove("is-open");
+      navToggle.setAttribute("aria-expanded", "false");
+    }
+    function openNav() {
+      siteNav.classList.add("is-open");
+      navToggle.setAttribute("aria-expanded", "true");
+    }
+
+    navToggle.addEventListener("click", function () {
+      if (siteNav.classList.contains("is-open")) closeNav();
+      else openNav();
+    });
+
+    siteNav.addEventListener("click", function (e) {
+      if (e.target.tagName === "A") closeNav();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeNav();
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!siteNav.classList.contains("is-open")) return;
+      if (siteNav.contains(e.target) || navToggle.contains(e.target)) return;
+      closeNav();
+    });
+
+    // A resize back to desktop width shouldn't leave the mobile
+    // dropdown state stuck open underneath the now-visible inline nav.
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 640) closeNav();
+    });
+  }
+
+  /* -------------------------------------------------------
      Scroll reveal
   ------------------------------------------------------- */
   var revealTargets = document.querySelectorAll("[data-reveal]");

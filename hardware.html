@@ -23,12 +23,15 @@
       <img class="wordmark-logo" src="assets/arply-logo.png" alt="arply" width="220" height="67" />
     </a>
     <div class="header-actions">
-      <nav class="site-nav">
+      <nav class="site-nav" id="site-nav">
         <a href="#print-it-yourself" aria-current="page">Hardware</a>
         <a href="#quickstart">Quickstart</a>
         <a href="#flash">Flash</a>
         <a href="https://github.com/arply/airplay-esp32-main" target="_blank" rel="noopener">GitHub</a>
       </nav>
+      <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
       <a class="btn btn-ghost" href="index.html#waitlist">Join the waitlist</a>
     </div>
   </div>
@@ -112,8 +115,7 @@
         <div class="file-card">
           <h3>Printables</h3>
           <p>Browse the project page on Printables — remixes, print settings, and community photos.</p>
-          <a class="btn btn-ghost is-disabled" href="#" aria-disabled="true" tabindex="-1">Coming soon</a>
-          <!-- TODO: replace href with your printables.com project URL and drop the is-disabled class -->
+          <a class="btn btn-ghost" href="https://www.printables.com/@arply_5243428/models" target="_blank" rel="noopener">View on Printables</a>
         </div>
         <div class="file-card">
           <h3>Electronics</h3>
