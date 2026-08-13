@@ -1,0 +1,13 @@
+{
+  "name": "arply",
+  "version": "0.1.29",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        { "path": "arply-firmware-0.1.29.bin", "offset": 0 }
+      ]
+    }
+  ]
+}

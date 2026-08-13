@@ -130,13 +130,10 @@
         <h3>ESP32 web flasher</h3>
         <p>Plug in your board and install the latest arply firmware in one click, powered by <a class="trust-link" href="https://esphome.github.io/esp-web-tools/" target="_blank" rel="noopener">ESP Web Tools</a>.</p>
         <esp-web-install-button manifest="assets/firmware/manifest.json">
-          <button slot="activate" class="btn btn-primary is-disabled" disabled>Coming soon</button>
+          <button slot="activate" class="btn btn-primary">Install arply firmware</button>
           <span slot="unsupported">Web flashing needs Chrome or Edge on desktop.</span>
           <span slot="not-allowed">Web flashing isn't available over this connection (needs HTTPS).</span>
         </esp-web-install-button>
-        <!-- TODO: once firmware is built, add assets/firmware/manifest.json + the
-             compiled .bin(s) it points to, then remove `disabled`/`is-disabled`
-             from the activate button above. See https://esphome.github.io/esp-web-tools/ -->
       </div>
     </div>
   </section>
