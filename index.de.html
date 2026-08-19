@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>arply — der €20 Open-Source-AirPlay-2-Receiver</title>
-<meta name="description" content="arply verwandelt Hardware, die du schon besitzt, in einen AirPlay 2 Audio-Receiver für etwa 20 € an Teilen. Offen, nicht-kommerzielle Lizenz, keine Apple-Hardware, kein Abo, nichts in der Cloud." />
+<title>Hardware &amp; Vorbestellung — arply</title>
+<meta name="description" content="Drucke dein eigenes Gehäuse für arplys ~20 € Hardware, oder reserviere eine fertig montierte Einheit mit 1 € Anzahlung." />
 <meta name="theme-color" content="#f7f8fb" />
-<meta property="og:title" content="arply — der €20 Open-Source-AirPlay-2-Receiver" />
-<meta property="og:description" content="Verwandle jeden Lautsprecher in ein AirPlay 2 Ziel für etwa 20 € an Teilen. Offen, nicht-kommerzielle Lizenz, nur lokales Netzwerk, nicht mit Apple verbunden." />
+<meta property="og:title" content="Hardware & Vorbestellung — arply" />
+<meta property="og:description" content="Drucke dein eigenes Gehäuse für arplys ~20 € Hardware, oder reserviere eine fertig montierte Einheit mit 1 € Anzahlung." />
 <meta property="og:type" content="website" />
 <link rel="alternate" hreflang="en" href="https://arply.de/index.html" />
 <link rel="alternate" hreflang="de" href="https://arply.de/index.de.html" />
@@ -15,23 +15,24 @@
 <link rel="icon" type="image/png" href="assets/favicon.png?v=3" />
 <link rel="preload" href="fonts/geist-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="preload" href="fonts/geist-mono-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preconnect" href="https://unpkg.com" crossorigin />
 <link rel="stylesheet" href="css/style.css?v=3" />
 </head>
 <body>
 
 <header class="site-header">
   <div class="wrap header-inner">
-    <a class="wordmark" href="#top">
+    <a class="wordmark" href="landing.de.html#top">
       <img class="wordmark-logo" src="assets/arply-logo.png" alt="arply" width="220" height="67" />
     </a>
     <div class="header-actions">
       <nav class="site-nav" id="site-nav">
-        <a href="hardware.de.html#print-it-yourself">Hardware</a>
-        <a href="hardware.de.html#quickstart">Schnellstart</a>
-        <a href="hardware.de.html#flash">Flash</a>
+        <a href="#print-it-yourself" aria-current="page">Hardware</a>
+        <a href="#quickstart">Schnellstart</a>
+        <a href="#flash">Flash</a>
         <a href="https://github.com/arply/airplay-esp32-main" target="_blank" rel="noopener">GitHub</a>
       </nav>
-      <a class="btn btn-ghost" href="#waitlist">Warteliste beitreten</a>
+      <a class="btn btn-ghost" href="landing.de.html#waitlist">Warteliste beitreten</a>
       <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Menü umschalten">
         <span></span><span></span><span></span>
       </button>
@@ -41,90 +42,128 @@
 
 <main id="top">
 
-  <section class="hero wrap">
-    <p class="eyebrow">Früher Zugang</p>
-    <h1 class="hero-title text-balance">Jeder Lautsprecher.<br />Jetzt AirPlay‑fähig.</h1>
-    <p class="hero-sub">arply verwandelt Hardware, die du schon besitzt, in einen vollwertigen AirPlay&nbsp;2 Audio-Receiver — keine Apple-Hardware, kein Abo, nichts wird in die Cloud gesendet.</p>
-
-    <ul class="badge-row" aria-label="Highlights">
-      <li class="badge">Offen, nicht-kommerziell</li>
-      <li class="badge">~20 € an Teilen</li>
-      <li class="badge">Nur lokales Netzwerk</li>
-    </ul>
-
-    <form class="waitlist-form" novalidate>
-      <label class="sr-only" for="email">E-Mail-Adresse</label>
-      <input id="email" name="email" type="email" placeholder="du@beispiel.de" autocomplete="email" required />
-      <button class="btn btn-primary" type="submit">Benachrichtige mich</button>
-    </form>
-    <p class="form-note" id="waitlistNote" aria-live="polite">Eine E-Mail, sobald es fertig ist. Kein Spam, kein Newsletter.</p>
-
-    <div class="hero-visual" aria-hidden="true">
-      <canvas id="broadcast" width="960" height="360"></canvas>
+  <div class="wrap">
+    <div class="notice-banner" role="note">
+      <span class="notice-icon" aria-hidden="true">⚠️</span>
+      <p><strong>Kein zertifiziertes Produkt.</strong> Die arply-Hardware ist nicht CE-gekennzeichnet und hat kein formales Sicherheits- oder Zulassungsverfahren durchlaufen. Es ist ein Open-Source-DIY-Kit für Maker, Hobbyisten, Studierende und Forschende — ausschließlich für private, nicht-kommerzielle Nutzung. Du baust, flashst und betreibst es vollständig auf eigenes Risiko. Den vollständigen Haftungsausschluss findest du in den <a href="preorder-terms.html">Vorbestellungsbedingungen</a>.</p>
     </div>
+  </div>
+
+  <section class="hero wrap hardware-hero">
+    <p class="eyebrow">Hardware</p>
+    <h1 class="hero-title text-balance">Gib arply ein Zuhause.</h1>
+    <p class="hero-sub">arply läuft auf etwa 20 € Hardware. Drucke ein Gehäuse dafür, flashe es direkt aus deinem Browser, oder überspringe beides und reserviere eine fertig montierte Einheit.</p>
   </section>
 
-  <section class="section flow-section" data-reveal>
-    <div class="wrap grid-asym">
-      <div class="flow-intro">
-        <p class="eyebrow">So funktioniert's</p>
-        <h2 class="section-title text-balance">So bringt arply Audio zu deinem Lautsprecher</h2>
-        <p class="section-text">AirPlay ist ein Protokoll, kein Stück Hardware. arply spricht es fließend — so kann alles, was Audio abspielen kann, im AirPlay-Menü deiner Apple-Geräte auftauchen.</p>
-      </div>
-
-      <div class="flow-diagram">
-        <div class="flow-node">
-          <span class="flow-index">Quelle</span>
-          <h3>Dein Apple-Gerät</h3>
-          <p>iPhone, iPad oder Mac — Streaming über AirPlay&nbsp;2, genau wie gewohnt.</p>
-        </div>
-        <div class="flow-connector" aria-hidden="true"></div>
-        <div class="flow-node">
-          <span class="flow-index">Empfänger</span>
-          <h3>arply</h3>
-          <p>Läuft unauffällig in deinem Netzwerk, spricht AirPlay nativ, dekodiert zu sauberem PCM.</p>
-        </div>
-        <div class="flow-connector" aria-hidden="true"></div>
-        <div class="flow-node">
-          <span class="flow-index">Ausgabe</span>
-          <h3>Dein Lautsprecher</h3>
-          <p>Jeder DAC, Verstärker oder Aktivlautsprecher, den du schon hast.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section trust-section" data-reveal>
+  <section class="section quickstart-section" id="quickstart" data-reveal>
     <div class="wrap">
-      <p class="eyebrow">Was arply anders macht</p>
-      <div class="trust-row">
-        <div class="trust-item">
-          <h3>Nur lokales Netzwerk</h3>
-          <p>Audio bleibt in deinem WLAN. Kein Konto, kein Cloud-Relay, keine Telemetrie, die nach Hause funkt.</p>
+      <p class="eyebrow">Schnellstart</p>
+      <h2 class="section-title text-balance">In fünf Schritten von Einzelteilen zu AirPlay</h2>
+      <p class="section-text">Die Kurzversion — eine ausführliche Anleitung folgt bald. Das hier deckt ab, was du brauchst, um arply zum Laufen zu bringen.</p>
+
+      <ol class="steps-list">
+        <li class="step">
+          <span class="step-number">1</span>
+          <div class="step-body">
+            <h3>Teile besorgen</h3>
+            <p>Ein Seeed XIAO ESP32‑S3 und ein PCM5102A-DAC-Board — keine Verkabelung nötig, insgesamt etwa 20 €. Oder überspringe das und reserviere weiter unten eine fertig montierte Einheit.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-number">2</span>
+          <div class="step-body">
+            <h3>Gehäuse drucken</h3>
+            <p>Lade die STL/STEP-Dateien herunter oder finde das Projekt auf Printables.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-number">3</span>
+          <div class="step-body">
+            <h3>Firmware flashen</h3>
+            <p>Verbinde das Board per USB und flashe es direkt aus deinem Browser — keine Software nötig.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-number">4</span>
+          <div class="step-body">
+            <h3>Mit WLAN verbinden</h3>
+            <p>Schließe arply an USB-Strom an, und es startet sein eigenes Netzwerk, <code>arply setup</code>. Verbinde dich damit — eine Einrichtungsseite öffnet sich automatisch, oder öffne selbst <a href="http://arply.local">arply.local</a>. Von dort aus verbindest du es mit deinem WLAN, gibst ihm einen Namen und richtest es nach deinen Wünschen ein.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-number">5</span>
+          <div class="step-body">
+            <h3>In AirPlay finden</h3>
+            <p>Es taucht im AirPlay-Menü jedes iPhones, iPads oder Macs im selben Netzwerk auf.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="print-it-yourself" data-reveal>
+    <div class="wrap">
+      <p class="eyebrow">Selbst herstellen</p>
+      <h2 class="section-title text-balance">CAD-Ressourcen</h2>
+      <p class="section-text">Ein minimales Gehäuse, passend für das Board und die Lautsprecherverkabelung, die arply braucht. Gehäuse- und Elektronik-Design stehen unter <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY‑NC‑SA 4.0</a> — frei zum Nachbauen, Verändern und Teilen für den privaten Gebrauch; der kommerzielle Weiterverkauf braucht eine Genehmigung.</p>
+
+      <div class="file-row">
+        <div class="file-card">
+          <h3>Gehäuse</h3>
+          <p>Direkter Download des Gehäusemodells, druckfertig.</p>
+          <a class="btn btn-primary is-disabled" href="#" aria-disabled="true" tabindex="-1">Demnächst verfügbar</a>
         </div>
-        <div class="trust-item">
-          <h3>Nicht mit Apple verbunden</h3>
-          <p>Eine unabhängige, inoffizielle Umsetzung des AirPlay-Protokolls, gebaut von jemandem, der sich mehr AirPlay-fähige Lautsprecher gewünscht hat.</p>
+        <div class="file-card">
+          <h3>Printables</h3>
+          <p>Durchstöbere die Projektseite auf Printables — Remixes, Druckeinstellungen und Fotos der Community.</p>
+          <a class="btn btn-ghost" href="https://www.printables.com/@arply_5243428/models" target="_blank" rel="noopener">Auf Printables ansehen</a>
         </div>
-        <div class="trust-item">
-          <h3>Offen, nicht-kommerziell</h3>
-          <p>Ein kleiner, gut lesbarer Quellcode und ein offenes Hardware-Design — ansehen, nachbauen, verändern, einen Pull Request schicken. Frei für private und nicht-kommerzielle Nutzung; der Weiterverkauf braucht eine Genehmigung. Die Firmware steht unter einer <a class="trust-link" href="https://github.com/arply/airplay-esp32-main/blob/main/LICENSE" target="_blank" rel="noopener">Non-Commercial-Lizenz</a>, das Hardware-Design unter <a class="trust-link" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>.</p>
-          <a class="trust-link" href="https://github.com/arply/airplay-esp32-main" target="_blank" rel="noopener">Quellcode auf GitHub ansehen →</a>
+        <div class="file-card">
+          <h3>Elektronik</h3>
+          <p>Das 3D-Modell der Elektronik — Board-Layout und Passform, direkt im Browser ansehbar.</p>
+          <a class="btn btn-ghost" href="https://cad.onshape.com/documents/d71edc4c31afcb61a1e24f5f/w/f6b7e3439450931fdbf70524/e/2cff82750926d0e563237282?renderMode=0&amp;uiState=6a7e08fe48313e56adfcf74e" target="_blank" rel="noopener">Auf Onshape ansehen</a>
+        </div>
+        <div class="file-card">
+          <h3>Platine kaufen</h3>
+          <p>Willst du sie nicht selbst bestellen? Hol dir die blanke Platine zum Selbstbau auf Tindie.</p>
+          <a class="btn btn-primary" href="https://www.tindie.com/products/43620/" target="_blank" rel="noopener">Auf Tindie holen</a>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section closing-section" id="waitlist" data-reveal>
-    <div class="wrap closing-inner">
-      <h2 class="section-title text-balance">Sei der Erste, der es installiert.</h2>
-      <p class="section-text">arply befindet sich noch in der Entwicklung. Hinterlasse deine E-Mail-Adresse, und wir melden uns, sobald erste Builds bereit sind.</p>
-      <form class="waitlist-form" data-waitlist-secondary novalidate>
-        <label class="sr-only" for="email2">E-Mail-Adresse</label>
-        <input id="email2" name="email" type="email" placeholder="du@beispiel.de" autocomplete="email" required />
-        <button class="btn btn-primary" type="submit">Benachrichtige mich</button>
-      </form>
-      <p class="form-note" aria-live="polite">Eine E-Mail, sobald es fertig ist. Kein Spam, kein Newsletter.</p>
+  <section class="section" id="flash" data-reveal>
+    <div class="wrap">
+      <p class="eyebrow">Einrichten</p>
+      <h2 class="section-title text-balance">Firmware flashen</h2>
+      <p class="section-text">Flashe arply direkt aus deinem Browser über USB — keine Software nötig. Funktioniert in Chrome oder Edge am Desktop.</p>
+
+      <div class="file-card flasher-card">
+        <h3>ESP32-Web-Flasher</h3>
+        <p>Verbinde dein Board und installiere die neueste arply-Firmware mit einem Klick, powered by <a class="trust-link" href="https://esphome.github.io/esp-web-tools/" target="_blank" rel="noopener">ESP Web Tools</a>.</p>
+        <esp-web-install-button manifest="assets/firmware/manifest.json">
+          <button slot="activate" class="btn btn-primary">arply-Firmware installieren</button>
+          <span slot="unsupported">Web-Flashing benötigt Chrome oder Edge am Desktop.</span>
+          <span slot="not-allowed">Web-Flashing ist über diese Verbindung nicht verfügbar (benötigt HTTPS).</span>
+        </esp-web-install-button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section preorder-section" data-reveal>
+    <div class="wrap">
+      <p class="eyebrow">Willst du es nicht selbst drucken?</p>
+      <h2 class="section-title text-balance">Fertig montierte Einheit reservieren</h2>
+      <p class="section-text">Leiste eine kleine Anzahlung, um ein fertig montiertes arply inklusive Gehäuse zu reservieren. Sie wird beim Versand vom Endpreis abgezogen.</p>
+
+      <div class="preorder-card">
+        <div class="preorder-price">
+          <span class="preorder-amount">€1</span>
+          <span class="preorder-label">Reservierungsanzahlung pro Einheit</span>
+        </div>
+        <a class="btn btn-primary" href="https://ko-fi.com/arply" target="_blank" rel="noopener">Für 1 € reservieren</a>
+        <p class="form-note">Anzahlungen sind erstattungsfähig — die <a href="preorder-terms.html">Vorbestellungsbedingungen</a> enthalten das Widerrufsrecht und den vollständigen Produkthaftungsausschluss.</p>
+      </div>
     </div>
   </section>
 
@@ -139,7 +178,7 @@
       <p class="footer-tagline">Ein inoffizieller, offener AirPlay-Receiver.</p>
     </div>
     <nav class="footer-nav">
-      <a href="hardware.de.html">Hardware &amp; Vorbestellung</a>
+      <a href="landing.de.html">Über</a>
       <a href="https://github.com/arply/airplay-esp32-main" target="_blank" rel="noopener">GitHub</a>
       <a href="preorder-terms.html">Vorbestellungsbedingungen</a>
       <a href="impressum.html">Impressum</a>
@@ -150,6 +189,7 @@
   </div>
 </footer>
 
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

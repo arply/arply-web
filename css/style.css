@@ -757,10 +757,11 @@ code {
   height: auto;
 }
 
-/* Full-width parallax photo banner behind the eyebrow, title, and
-   subtext — background-attachment:fixed gives a porthole effect as
-   the page scrolls. Falls back to a static (still fine) image where
-   fixed attachment isn't supported (iOS Safari). */
+/* Full-width photo banner behind the eyebrow, title, and subtext.
+   background-attachment:fixed (desktop only, below) gives a porthole
+   parallax effect as the page scrolls; on mobile that property is
+   unreliable (can render blank instead of falling back), so mobile
+   just gets the plain, non-parallax image. */
 .hero-title-banner {
   position: relative;
   isolation: isolate;
@@ -781,8 +782,13 @@ code {
     url("../assets/hardware/op1-example.jpg");
   background-size: cover, cover;
   background-position: center, center 35%;
-  background-attachment: fixed, fixed;
   background-repeat: no-repeat, no-repeat;
+}
+
+@media (min-width: 768px) {
+  .hero-title-banner::before {
+    background-attachment: fixed, fixed;
+  }
 }
 
 .hero-title-banner .eyebrow,
