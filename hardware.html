@@ -4,10 +4,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Hardware &amp; preorder — arply</title>
-<meta name="description" content="Print your own housing for arply's ~€20 hardware, or reserve a ready-made unit with a €1 deposit." />
+<meta name="description" content="Print your own housing for arply's ~€20 hardware, or get notified when ready-made units are available." />
 <meta name="theme-color" content="#f7f8fb" />
 <meta property="og:title" content="Hardware & preorder — arply" />
-<meta property="og:description" content="Print your own housing for arply's ~€20 hardware, or reserve a ready-made unit with a €1 deposit." />
+<meta property="og:description" content="Print your own housing for arply's ~€20 hardware, or get notified when ready-made units are available." />
 <meta property="og:type" content="website" />
 <link rel="alternate" hreflang="en" href="https://arply.de/hardware.html" />
 <link rel="alternate" hreflang="de" href="https://arply.de/hardware.de.html" />
@@ -16,7 +16,7 @@
 <link rel="preload" href="fonts/geist-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="preload" href="fonts/geist-mono-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="preconnect" href="https://unpkg.com" crossorigin />
-<link rel="stylesheet" href="css/style.css?v=2" />
+<link rel="stylesheet" href="css/style.css?v=3" />
 </head>
 <body>
 
@@ -29,6 +29,7 @@
       <nav class="site-nav" id="site-nav">
         <a href="#print-it-yourself" aria-current="page">Hardware</a>
         <a href="#quickstart">Quickstart</a>
+        <a href="#pinout">Pinout</a>
         <a href="#flash">Flash</a>
         <a href="https://github.com/arply/airplay-esp32-main" target="_blank" rel="noopener">GitHub</a>
       </nav>
@@ -52,7 +53,10 @@
   <section class="hero wrap hardware-hero">
     <p class="eyebrow">Hardware</p>
     <h1 class="hero-title text-balance">Give arply a home.</h1>
-    <p class="hero-sub">arply runs on about €20 of hardware. Print a housing for it, flash it straight from your browser, or skip both and reserve a ready-made unit.</p>
+    <p class="hero-sub">arply runs on about €20 of hardware. Print a housing for it, flash it straight from your browser, or skip both and wait for a ready-made unit.</p>
+    <div class="hero-visual hardware-hero-visual">
+      <img src="assets/hardware/pcb-pair-cutout.png" alt="arply's DAC board, front and back — a Seeed XIAO ESP32-S3 paired with a PCM5102A DAC breakout" width="1086" height="700" loading="lazy" />
+    </div>
   </section>
 
   <section class="section quickstart-section" id="quickstart" data-reveal>
@@ -66,7 +70,7 @@
           <span class="step-number">1</span>
           <div class="step-body">
             <h3>Get the parts</h3>
-            <p>A Seeed XIAO ESP32‑S3 and a PCM5102A DAC board — no wiring needed, about €20 total. Or skip this and reserve a ready-made unit below.</p>
+            <p>A Seeed XIAO ESP32‑S3 and a PCM5102A DAC board — no wiring needed, about €20 total. Or skip this and get on the waitlist for a ready-made unit below.</p>
           </div>
         </li>
         <li class="step">
@@ -101,6 +105,47 @@
     </div>
   </section>
 
+  <section class="section pinout-section" id="pinout" data-reveal>
+    <div class="wrap">
+      <p class="eyebrow">Reference</p>
+      <h2 class="section-title text-balance">Pinout</h2>
+    </div>
+
+    <div class="pinout-diagram">
+      <div class="pinout-board pinout-board--left">
+        <div class="pinout-img-wrap">
+          <img src="assets/hardware/pinout-left-cutout.png" alt="arply DAC board, left header" width="673" height="1380" loading="lazy" />
+        </div>
+        <ul class="pin-col pin-col--left">
+          <li style="top:26.5%" tabindex="0" data-pin="D0 · nMUTE" data-desc="Active-low hardware mute for the DAC output, wired to the PCM5102A's MUTE pin.">D0 <span class="pin-signal">nMUTE</span></li>
+          <li style="top:35.5%" tabindex="0" data-pin="D1" data-desc="General-purpose GPIO. Not connected on the DAC board.">D1</li>
+          <li style="top:44.6%" tabindex="0" data-pin="D2" data-desc="General-purpose GPIO. Not connected on the DAC board.">D2</li>
+          <li style="top:53.7%" tabindex="0" data-pin="D3" data-desc="General-purpose GPIO. Not connected on the DAC board.">D3</li>
+          <li style="top:62.8%" tabindex="0" data-pin="D4" data-desc="General-purpose GPIO. Not connected on the DAC board.">D4</li>
+          <li style="top:72.0%" tabindex="0" data-pin="D5" data-desc="General-purpose GPIO. Not connected on the DAC board.">D5</li>
+          <li style="top:81.1%" tabindex="0" data-pin="D6" data-desc="General-purpose GPIO. Not connected on the DAC board.">D6</li>
+        </ul>
+      </div>
+
+      <div class="pinout-board pinout-board--right">
+        <ul class="pin-col pin-col--right">
+          <li style="top:26.5%" tabindex="0" data-pin="5V" data-desc="5V power input for the XIAO module.">5V</li>
+          <li style="top:35.5%" tabindex="0" data-pin="GND" data-desc="Ground reference.">GND</li>
+          <li style="top:44.6%" tabindex="0" data-pin="EN" data-desc="Enable / reset pin for the XIAO module.">EN</li>
+          <li style="top:53.7%" tabindex="0" data-pin="D10 · DIN" data-desc="I²S serial data line into the PCM5102A DAC."><span class="pin-signal">DIN</span> D10</li>
+          <li style="top:62.8%" tabindex="0" data-pin="D9 · LRCK" data-desc="I²S word-select clock — switches between left and right channel."><span class="pin-signal">LRCK</span> D9</li>
+          <li style="top:72.0%" tabindex="0" data-pin="D8 · BCK" data-desc="I²S bit clock."><span class="pin-signal">BCK</span> D8</li>
+          <li style="top:81.1%" tabindex="0" data-pin="D7" data-desc="General-purpose GPIO. Not connected on the DAC board.">D7</li>
+        </ul>
+        <div class="pinout-img-wrap">
+          <img src="assets/hardware/pinout-right-cutout.png" alt="arply DAC board, right header" width="673" height="1380" loading="lazy" />
+        </div>
+      </div>
+
+      <div class="pinout-tooltip" id="pinoutTooltip" role="tooltip" aria-hidden="true"></div>
+    </div>
+  </section>
+
   <section class="section" id="print-it-yourself" data-reveal>
     <div class="wrap">
       <p class="eyebrow">Print it yourself</p>
@@ -121,8 +166,8 @@
           <a class="btn btn-ghost" href="https://www.printables.com/@arply_5243428/models" target="_blank" rel="noopener">View on Printables</a>
         </div>
         <div class="file-card">
-          <h3>Electronics</h3>
-          <p>The 3D model of the electronics — board layout and fit, viewable right in your browser.</p>
+          <h3>CAD Model</h3>
+          <p>The full assembly — PCB and housing together, viewable right in your browser.</p>
           <a class="btn btn-ghost" href="https://cad.onshape.com/documents/d71edc4c31afcb61a1e24f5f/w/f6b7e3439450931fdbf70524/e/2cff82750926d0e563237282?renderMode=0&amp;uiState=6a7e08fe48313e56adfcf74e" target="_blank" rel="noopener">View on Onshape</a>
         </div>
         <div class="file-card">
@@ -152,20 +197,17 @@
     </div>
   </section>
 
-  <section class="section preorder-section" data-reveal>
+  <section class="section" data-reveal>
     <div class="wrap">
       <p class="eyebrow">Don't want to print it?</p>
-      <h2 class="section-title text-balance">Reserve a ready-made unit</h2>
-      <p class="section-text">Put down a small deposit to reserve a pre-assembled arply, housing included. It comes off the final price when units ship.</p>
-
-      <div class="preorder-card">
-        <div class="preorder-price">
-          <span class="preorder-amount">€1</span>
-          <span class="preorder-label">reservation deposit, per unit</span>
-        </div>
-        <a class="btn btn-primary" href="https://ko-fi.com/arply" target="_blank" rel="noopener">Reserve for €1</a>
-        <p class="form-note">Deposits are refundable — see the <a href="preorder-terms.html">preorder terms</a> for withdrawal rights and the full product disclaimer.</p>
-      </div>
+      <h2 class="section-title text-balance">Get notified when ready-made units ship</h2>
+      <p class="section-text">Leave your email and we'll reach out when pre-assembled units, housing included, are ready to order.</p>
+      <form class="waitlist-form" data-waitlist-hardware novalidate>
+        <label class="sr-only" for="email-hardware">Email address</label>
+        <input id="email-hardware" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+        <button class="btn btn-primary" type="submit">Notify me</button>
+      </form>
+      <p class="form-note" aria-live="polite">One email when it's ready. No spam, no newsletter.</p>
     </div>
   </section>
 
@@ -181,6 +223,7 @@
     </div>
     <nav class="footer-nav">
       <a href="index.html#top">Home</a>
+      <a href="performance.html">Performance</a>
       <a href="https://github.com/arply/airplay-esp32-main" target="_blank" rel="noopener">GitHub</a>
       <a href="preorder-terms.html">Preorder terms</a>
       <a href="impressum.html">Legal notice (Impressum)</a>

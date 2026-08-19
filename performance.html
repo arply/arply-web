@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Performance — arply</title>
+<meta name="description" content="Measured audio performance of arply's hardware, tested with arply-qc." />
+<meta name="theme-color" content="#f7f8fb" />
+<meta property="og:title" content="Performance — arply" />
+<meta property="og:description" content="Measured audio performance of arply's hardware, tested with arply-qc." />
+<meta property="og:type" content="website" />
+<link rel="icon" type="image/png" href="assets/favicon.png?v=3" />
+<link rel="preload" href="fonts/geist-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="fonts/geist-mono-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="stylesheet" href="css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="wordmark" href="index.html#top">
+      <img class="wordmark-logo" src="assets/arply-logo.png" alt="arply" width="220" height="67" />
+    </a>
+    <div class="header-actions">
+      <nav class="site-nav" id="site-nav">
+        <a href="hardware.html#print-it-yourself">Hardware</a>
+        <a href="hardware.html#quickstart">Quickstart</a>
+        <a href="hardware.html#pinout">Pinout</a>
+        <a href="hardware.html#flash">Flash</a>
+        <a href="performance.html" aria-current="page">Performance</a>
+        <a href="https://github.com/arply/airplay-esp32-main" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <a class="btn btn-ghost" href="index.html#waitlist">Join the waitlist</a>
+      <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero wrap">
+    <p class="eyebrow">Performance</p>
+    <h1 class="hero-title text-balance">How arply measures up.</h1>
+    <p class="hero-sub">Audio quality numbers for arply's stock hardware, measured with <a class="trust-link" href="https://github.com/arply/arply-qc" target="_blank" rel="noopener">arply-qc</a>, an open-source test rig built for this project.</p>
+  </section>
+
+  <section class="section" data-reveal>
+    <div class="wrap">
+      <p class="eyebrow">Test report</p>
+      <h2 class="section-title text-balance">Download the report</h2>
+      <p class="section-text"><a class="trust-link" href="assets/performance/arply-test-report.pdf" target="_blank" rel="noopener">arply-test-report.pdf</a> — frequency response, SNR, THD+N, and dynamic range, measured with arply-qc.</p>
+      <!-- TODO: add the real PDF at assets/performance/arply-test-report.pdf -->
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <span class="wordmark small">
+        <img class="wordmark-logo" src="assets/arply-logo.png" alt="arply" width="220" height="67" />
+      </span>
+      <p class="footer-tagline">An unofficial, open AirPlay receiver.</p>
+    </div>
+    <nav class="footer-nav">
+      <a href="hardware.html">Hardware &amp; preorder</a>
+      <a href="performance.html">Performance</a>
+      <a href="https://github.com/arply/airplay-esp32-main" target="_blank" rel="noopener">GitHub</a>
+      <a href="preorder-terms.html">Preorder terms</a>
+      <a href="impressum.html">Legal notice (Impressum)</a>
+      <a href="mailto:info@arply.de">Contact</a>
+    </nav>
+    <p class="footer-disclaimer">arply is an independent project and is not affiliated with, endorsed by, or sponsored by Apple Inc. AirPlay® is a registered trademark of Apple Inc., referenced here only to describe protocol compatibility.</p>
+    <p class="footer-copy">© 2026 arply · arply.de</p>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

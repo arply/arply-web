@@ -221,6 +221,31 @@
   }
 
   /* -------------------------------------------------------
+     Pinout tooltip
+     Hover/focus a pin to fill in the shared info box that
+     floats in the open space of the diagram.
+  ------------------------------------------------------- */
+  var pinoutTooltip = document.getElementById("pinoutTooltip");
+  if (pinoutTooltip) {
+    var pins = document.querySelectorAll(".pin-col li[data-desc]");
+    var showPin = function (pin) {
+      pinoutTooltip.innerHTML = "<strong>" + pin.getAttribute("data-pin") + "</strong>" + pin.getAttribute("data-desc");
+      pinoutTooltip.classList.add("is-visible");
+      pinoutTooltip.removeAttribute("aria-hidden");
+    };
+    var hidePinoutTooltip = function () {
+      pinoutTooltip.classList.remove("is-visible");
+      pinoutTooltip.setAttribute("aria-hidden", "true");
+    };
+    pins.forEach(function (pin) {
+      pin.addEventListener("mouseenter", function () { showPin(pin); });
+      pin.addEventListener("mouseleave", hidePinoutTooltip);
+      pin.addEventListener("focus", function () { showPin(pin); });
+      pin.addEventListener("blur", hidePinoutTooltip);
+    });
+  }
+
+  /* -------------------------------------------------------
      Scroll reveal
   ------------------------------------------------------- */
   var revealTargets = document.querySelectorAll("[data-reveal]");

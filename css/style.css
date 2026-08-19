@@ -709,6 +709,149 @@ code {
 }
 
 /* ---------------------------------------------------------
+   Hardware page — hero product photo
+--------------------------------------------------------- */
+.hardware-hero-visual {
+  max-width: 640px;
+}
+
+.hardware-hero-visual img {
+  width: 100%;
+  height: auto;
+}
+
+/* ---------------------------------------------------------
+   Pinout diagram
+--------------------------------------------------------- */
+/* Full-bleed breakout at every width — each board's cut edge touches the
+   true window edge, like the reference layout. Too narrow to fit both
+   boards side by side? They stack, but each row still hugs its own edge
+   with its pin labels attached right next to it, never centered/floating. */
+.pinout-diagram {
+  --pinout-h: clamp(13rem, 34vw, 21rem);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+}
+
+@media (min-width: 860px) {
+  .pinout-diagram { flex-direction: row; justify-content: space-between; align-items: center; gap: 2rem; }
+}
+
+.pinout-board {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.pinout-board--left { justify-content: flex-start; }
+.pinout-board--right { justify-content: flex-end; }
+
+@media (min-width: 860px) {
+  .pinout-board { flex-shrink: 0; }
+}
+
+.pinout-img-wrap {
+  flex-shrink: 0;
+  height: var(--pinout-h);
+}
+
+.pinout-img-wrap img {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+
+.pin-col {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  height: var(--pinout-h);
+  width: 8rem;
+  flex-shrink: 0;
+}
+
+.pin-col li {
+  position: absolute;
+  left: 0;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  padding: 0.2rem 0.3rem;
+  margin: -0.2rem -0.3rem;
+  border-radius: 6px;
+  cursor: default;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.pin-col li:hover,
+.pin-col li:focus-visible {
+  background: var(--accent-soft);
+  color: var(--ink);
+  outline: none;
+}
+
+.pin-col--right li { left: auto; right: 0; text-align: right; }
+
+.pin-col .pin-signal {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.pin-col--left .pin-signal { margin-left: 0.5em; }
+.pin-col--right .pin-signal { margin-right: 0.5em; }
+
+/* Shared info box — sits in the open space between the two boards and
+   fills in with whichever pin is currently hovered/focused. */
+.pinout-tooltip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateY(6px);
+  width: max-content;
+  max-width: min(20rem, 80vw);
+  padding: 0.9rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 16px 34px -16px rgb(20 21 26 / 0.28);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 5;
+}
+
+.pinout-tooltip.is-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) translateY(0);
+}
+
+.pinout-tooltip strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pinout-tooltip { transition: opacity 0.01ms; }
+}
+
+/* ---------------------------------------------------------
    Notice banner (used on hardware.html)
 --------------------------------------------------------- */
 .notice-banner {
