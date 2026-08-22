@@ -822,20 +822,24 @@ code {
 /* ---------------------------------------------------------
    Pinout diagram
 --------------------------------------------------------- */
-/* Full-bleed breakout at every width — each board's cut edge touches the
-   true window edge, like the reference layout. Too narrow to fit both
-   boards side by side? They stack, but each row still hugs its own edge
-   with its pin labels attached right next to it, never centered/floating. */
+/* Breakout at every width, but capped — up to ~1440px it hugs the true
+   window edge like the reference layout; past that it locks to a fixed
+   "virtual edge" (--pinout-stage) so the boards stay a constant distance
+   from center instead of drifting apart on ultrawide screens. Too narrow
+   to fit both boards side by side? They stack, but each row still hugs
+   its own edge with its pin labels attached right next to it, never
+   centered/floating. */
 .pinout-diagram {
-  --pinout-h: clamp(13rem, 34vw, 21rem);
+  --pinout-h: clamp(15rem, 40vw, 26rem);
+  --pinout-stage: 72rem;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 2.5rem;
   margin-top: 2.5rem;
-  width: 100vw;
-  margin-inline: calc(50% - 50vw);
+  width: min(100vw, var(--pinout-stage));
+  margin-inline: auto;
 }
 
 @media (min-width: 860px) {
@@ -864,6 +868,18 @@ code {
   height: 100%;
   width: auto;
   display: block;
+}
+
+/* Fade the board's outer edge (the one nearest the stage edge) into the
+   page instead of letting the cutout silhouette end on a hard line. */
+.pinout-board--left .pinout-img-wrap img {
+  mask-image: linear-gradient(to right, transparent 0%, black 14%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 14%);
+}
+
+.pinout-board--right .pinout-img-wrap img {
+  mask-image: linear-gradient(to left, transparent 0%, black 14%);
+  -webkit-mask-image: linear-gradient(to left, transparent 0%, black 14%);
 }
 
 .pin-col {

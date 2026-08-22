@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Hardware &amp; Vorbestellung — arply</title>
+<title>Hardware &amp; Vorbestellung - arply</title>
 <meta name="description" content="Drucke dein eigenes Gehäuse für arplys ~20 € Hardware, oder reserviere eine fertig montierte Einheit mit 1 € Anzahlung." />
 <meta name="theme-color" content="#f7f8fb" />
-<meta property="og:title" content="Hardware & Vorbestellung — arply" />
+<meta property="og:title" content="Hardware & Vorbestellung - arply" />
 <meta property="og:description" content="Drucke dein eigenes Gehäuse für arplys ~20 € Hardware, oder reserviere eine fertig montierte Einheit mit 1 € Anzahlung." />
 <meta property="og:type" content="website" />
 <link rel="alternate" hreflang="en" href="https://arply.de/index.html" />
@@ -45,7 +45,7 @@
   <div class="wrap">
     <div class="notice-banner" role="note">
       <span class="notice-icon" aria-hidden="true">⚠️</span>
-      <p><strong>Kein zertifiziertes Produkt.</strong> Die arply-Hardware ist nicht CE-gekennzeichnet und hat kein formales Sicherheits- oder Zulassungsverfahren durchlaufen. Es ist ein Open-Source-DIY-Kit für Maker, Hobbyisten, Studierende und Forschende — ausschließlich für private, nicht-kommerzielle Nutzung. Du baust, flashst und betreibst es vollständig auf eigenes Risiko. Den vollständigen Haftungsausschluss findest du in den <a href="preorder-terms.html">Vorbestellungsbedingungen</a>.</p>
+      <p><strong>Kein zertifiziertes Produkt.</strong> Die arply-Hardware ist nicht CE-gekennzeichnet und hat kein formales Sicherheits- oder Zulassungsverfahren durchlaufen. Es ist ein Open-Source-DIY-Kit für Maker, Hobbyisten, Studierende und Forschende - ausschließlich für private, nicht-kommerzielle Nutzung. Du baust, flashst und betreibst es vollständig auf eigenes Risiko. Den vollständigen Haftungsausschluss findest du in den <a href="preorder-terms.html">Vorbestellungsbedingungen</a>.</p>
     </div>
   </div>
 
@@ -58,40 +58,26 @@
   <section class="section quickstart-section" id="quickstart" data-reveal>
     <div class="wrap">
       <p class="eyebrow">Schnellstart</p>
-      <h2 class="section-title text-balance">In fünf Schritten von Einzelteilen zu AirPlay</h2>
-      <p class="section-text">Die Kurzversion — eine ausführliche Anleitung folgt bald. Das hier deckt ab, was du brauchst, um arply zum Laufen zu bringen.</p>
+      <h2 class="section-title text-balance">In drei Schritten von Einzelteilen zu AirPlay</h2>
+      <p class="section-text">Die Kurzversion - eine ausführliche Anleitung folgt bald. Das hier deckt ab, was du brauchst, um arply zum Laufen zu bringen.</p>
 
       <ol class="steps-list">
         <li class="step">
           <span class="step-number">1</span>
           <div class="step-body">
-            <h3>Teile besorgen</h3>
-            <p>Ein Seeed XIAO ESP32‑S3 und ein PCM5102A-DAC-Board — keine Verkabelung nötig, insgesamt etwa 20 €. Oder überspringe das und reserviere weiter unten eine fertig montierte Einheit.</p>
+            <h3>Firmware flashen</h3>
+            <p>Verbinde das Board per USB und <a href="#flash">flashe es direkt aus deinem Browser</a> - keine Software nötig.</p>
           </div>
         </li>
         <li class="step">
           <span class="step-number">2</span>
           <div class="step-body">
-            <h3>Gehäuse drucken</h3>
-            <p>Lade die STL/STEP-Dateien herunter oder finde das Projekt auf Printables.</p>
+            <h3>Mit WLAN verbinden</h3>
+            <p>Schließe arply an USB-Strom an, und es startet sein eigenes Netzwerk, <code>arply setup</code>. Verbinde dich damit - eine Einrichtungsseite öffnet sich automatisch, oder öffne selbst <a href="http://arply.local">arply.local</a>. Von dort aus verbindest du es mit deinem WLAN, gibst ihm einen Namen und richtest es nach deinen Wünschen ein.</p>
           </div>
         </li>
         <li class="step">
           <span class="step-number">3</span>
-          <div class="step-body">
-            <h3>Firmware flashen</h3>
-            <p>Verbinde das Board per USB und flashe es direkt aus deinem Browser — keine Software nötig.</p>
-          </div>
-        </li>
-        <li class="step">
-          <span class="step-number">4</span>
-          <div class="step-body">
-            <h3>Mit WLAN verbinden</h3>
-            <p>Schließe arply an USB-Strom an, und es startet sein eigenes Netzwerk, <code>arply setup</code>. Verbinde dich damit — eine Einrichtungsseite öffnet sich automatisch, oder öffne selbst <a href="http://arply.local">arply.local</a>. Von dort aus verbindest du es mit deinem WLAN, gibst ihm einen Namen und richtest es nach deinen Wünschen ein.</p>
-          </div>
-        </li>
-        <li class="step">
-          <span class="step-number">5</span>
           <div class="step-body">
             <h3>In AirPlay finden</h3>
             <p>Es taucht im AirPlay-Menü jedes iPhones, iPads oder Macs im selben Netzwerk auf.</p>
@@ -105,7 +91,7 @@
     <div class="wrap">
       <p class="eyebrow">Selbst herstellen</p>
       <h2 class="section-title text-balance">CAD-Ressourcen</h2>
-      <p class="section-text">Ein minimales Gehäuse, passend für das Board und die Lautsprecherverkabelung, die arply braucht. Gehäuse- und Elektronik-Design stehen unter <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY‑NC‑SA 4.0</a> — frei zum Nachbauen, Verändern und Teilen für den privaten Gebrauch; der kommerzielle Weiterverkauf braucht eine Genehmigung.</p>
+      <p class="section-text">Ein minimales Gehäuse, passend für das Board und die Lautsprecherverkabelung, die arply braucht. Gehäuse- und Elektronik-Design stehen unter <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY‑NC‑SA 4.0</a> - frei zum Nachbauen, Verändern und Teilen für den privaten Gebrauch; der kommerzielle Weiterverkauf braucht eine Genehmigung.</p>
 
       <div class="file-row">
         <div class="file-card">
@@ -115,12 +101,12 @@
         </div>
         <div class="file-card">
           <h3>Printables</h3>
-          <p>Durchstöbere die Projektseite auf Printables — Remixes, Druckeinstellungen und Fotos der Community.</p>
+          <p>Durchstöbere die Projektseite auf Printables - Remixes, Druckeinstellungen und Fotos der Community.</p>
           <a class="btn btn-ghost" href="https://www.printables.com/@arply_5243428/models" target="_blank" rel="noopener">Auf Printables ansehen</a>
         </div>
         <div class="file-card">
           <h3>Elektronik</h3>
-          <p>Das 3D-Modell der Elektronik — Board-Layout und Passform, direkt im Browser ansehbar.</p>
+          <p>Das 3D-Modell der Elektronik - Board-Layout und Passform, direkt im Browser ansehbar.</p>
           <a class="btn btn-ghost" href="https://cad.onshape.com/documents/d71edc4c31afcb61a1e24f5f/w/f6b7e3439450931fdbf70524/e/2cff82750926d0e563237282?renderMode=0&amp;uiState=6a7e08fe48313e56adfcf74e" target="_blank" rel="noopener">Auf Onshape ansehen</a>
         </div>
         <div class="file-card">
@@ -136,13 +122,13 @@
     <div class="wrap">
       <p class="eyebrow">Einrichten</p>
       <h2 class="section-title text-balance">Firmware flashen</h2>
-      <p class="section-text">Flashe arply direkt aus deinem Browser über USB — keine Software nötig. Funktioniert in Chrome oder Edge am Desktop.</p>
+      <p class="section-text">Flashe arply direkt aus deinem Browser über USB - keine Software nötig. Funktioniert in Chrome oder Edge am Desktop.</p>
 
       <div class="file-card flasher-card">
         <h3>ESP32-Web-Flasher</h3>
-        <p>Verbinde dein Board und installiere die neueste arply-Firmware mit einem Klick, powered by <a class="trust-link" href="https://esphome.github.io/esp-web-tools/" target="_blank" rel="noopener">ESP Web Tools</a>.</p>
+        <p>Verbinde dein Board und flashe die neueste arply-Firmware mit einem Klick, powered by <a class="trust-link" href="https://esphome.github.io/esp-web-tools/" target="_blank" rel="noopener">ESP Web Tools</a>.</p>
         <esp-web-install-button manifest="assets/firmware/manifest.json">
-          <button slot="activate" class="btn btn-primary">arply-Firmware installieren</button>
+          <button slot="activate" class="btn btn-primary">arply-Firmware flashen</button>
           <span slot="unsupported">Web-Flashing benötigt Chrome oder Edge am Desktop.</span>
           <span slot="not-allowed">Web-Flashing ist über diese Verbindung nicht verfügbar (benötigt HTTPS).</span>
         </esp-web-install-button>
@@ -162,7 +148,7 @@
           <span class="preorder-label">Reservierungsanzahlung pro Einheit</span>
         </div>
         <a class="btn btn-primary" href="https://ko-fi.com/arply" target="_blank" rel="noopener">Für 1 € reservieren</a>
-        <p class="form-note">Anzahlungen sind erstattungsfähig — die <a href="preorder-terms.html">Vorbestellungsbedingungen</a> enthalten das Widerrufsrecht und den vollständigen Produkthaftungsausschluss.</p>
+        <p class="form-note">Anzahlungen sind erstattungsfähig - die <a href="preorder-terms.html">Vorbestellungsbedingungen</a> enthalten das Widerrufsrecht und den vollständigen Produkthaftungsausschluss.</p>
       </div>
     </div>
   </section>
