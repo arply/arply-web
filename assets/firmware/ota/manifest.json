@@ -1,14 +1,5 @@
 {
-  "version": "0.2.1",
-  "www": [
-    "dsp.html",
-    "index.html",
-    "logs.html",
-    "overview.html",
-    "speedtest.html"
-  ],
-  "builds": {
-    "arply_v1": "arply_v1.bin",
-    "arply_v1_usbdac": "arply_v1_usbdac.bin"
-  }
+  "version": "0.2.2",
+  "www": ["dsp.html","index.html","logs.html","overview.html","speedtest.html"],
+  "builds": {"arply_v1": "arply_v1.bin", "arply_v1_usbdac": "arply_v1_usbdac.bin"}
 }
