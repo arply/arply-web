@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>arply Room Calibration</title>
+<style>
+/* VOICE: calm, precise maker tool in the arply.de language (see design-language.md)
+   IDEA: a measurement bench – one large response chart, controls as quiet white cards
+   PICTURE: the frequency-response chart, live, correction band tinted in the accent
+   COLOUR and TYPE: ground #f7f8fb, cards #fff, ink #0b0d14, slate #4f556a, indigo #4e54dc; Inter + JetBrains Mono labels
+   LAYOUT: header bar with wordmark, eyebrow + statement title, chart first, cards in an auto-fit grid, one column on phone */
+:root{color-scheme:light dark;
+--bg:light-dark(#f7f8fb,#0e1016);--card:light-dark(#ffffff,#161922);--ink:light-dark(#0b0d14,#eef0f6);
+--mut:light-dark(#4f556a,#a9aec0);--quiet:light-dark(#6b6f82,#8e93a6);--line:light-dark(#eceef4,#262a36);
+--btnline:light-dark(#e3e5ee,#30354a);--acc:light-dark(#4e54dc,#8b90f0);--accbg:light-dark(#e9eafb,#23264a);
+--acctx:light-dark(#2f34a8,#c3c6fa);--band:light-dark(#eef0fd,#1b1e33);--meas:light-dark(#9aa0b4,#6f7489);
+--warnbg:light-dark(#f9f3e8,#2d2618);--warntx:light-dark(#6b4a10,#e8c98e)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+.top{border-bottom:1px solid var(--line);padding:0 max(4vw,16px)}
+.top .in{max-width:1100px;margin:0 auto;min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:inline-block;width:86px;height:26px;background:var(--ink);-webkit-mask:url(data:image/png;base64,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) center/contain no-repeat;mask:url(data:image/png;base64,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) center/contain no-repeat}footer .logo{width:59px;height:18px}
+#status a{color:var(--acc)}
+.wrap{max-width:1100px;margin:0 auto;padding:clamp(24px,4vw,44px) max(4vw,16px) 60px}
+.eyebrow{display:block;font:500 11.5px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:1.4px;text-transform:uppercase;color:var(--acc);margin:0 0 6px}
+h1{font-size:clamp(32px,5vw,48px);line-height:1.08;font-weight:700;letter-spacing:-0.02em;margin:0 0 8px;text-wrap:balance}
+h2{font-size:18px;margin:0 0 10px;font-weight:600}
+p{margin:0 0 8px}.small{font-size:13.5px;color:var(--quiet)}
+#status{font-size:15px;color:var(--mut);margin:0 0 20px}
+#status b{color:var(--ink);font-weight:600}
+code{font:500 .9em 'JetBrains Mono',ui-monospace,monospace;background:var(--accbg);color:var(--acctx);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
+.chartbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 12px 8px}
+.fig{position:relative;height:clamp(260px,52vh,440px)}.fig>canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13.5px;color:var(--mut);padding:6px 4px 2px}
+.legend i{display:inline-block;width:18px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+#readout{font:500 12.5px 'JetBrains Mono',ui-monospace,monospace;color:var(--mut);min-height:1.5em;padding:0 4px}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--bg);border:1px solid var(--btnline);border-radius:999px;padding:3px;gap:2px}
+.seg button{min-height:38px;border:0;background:transparent;padding:0 14px;font-weight:500}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg);font-weight:600}
+button.big{min-height:52px;padding:0 34px;font-size:17px}
+#result{font-size:15px;margin:14px 0 6px}
+#result b{font-variant-numeric:tabular-nums}
+#limitmsg button{min-height:36px;padding:0 14px;font-size:14px;margin-top:6px}
+#sendmsg{font-size:13.5px;color:var(--quiet);margin:-12px 0 20px;min-height:1.2em}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:16px;margin-top:16px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+button,.btn{font:600 15px Inter,system-ui,sans-serif;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--btnline);background:var(--card);color:var(--ink);cursor:pointer}
+button.pri,button.mag{background:var(--acc);border-color:var(--acc);color:#fff}
+:root[data-theme=dark] button.pri,:root[data-theme=dark] button.mag{color:#0e1016}
+button:disabled{opacity:.45;cursor:default}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+label.f{display:grid;grid-template-columns:8.5em 1fr 4.4em;align-items:center;gap:8px;font-size:14.5px;margin:4px 0}
+label.f output{text-align:right;font:500 13px 'JetBrains Mono',ui-monospace,monospace;color:var(--mut);white-space:nowrap}
+input[type=range]{width:100%;accent-color:var(--acc);min-height:32px}
+input[type=number],select{font:16px Inter,system-ui,sans-serif;min-height:40px;border:1px solid var(--btnline);border-radius:10px;background:var(--card);color:var(--ink);padding:0 10px;width:100%}
+.chk{display:flex;gap:8px;align-items:center;font-size:14.5px;min-height:40px}
+.chk input{width:20px;height:20px;accent-color:var(--acc)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:99px;padding:2px 4px 2px 12px;font-size:14px;background:var(--bg)}
+.chip button{min-height:32px;width:32px;padding:0;border:0;font-size:18px;background:transparent}
+.filt{border-top:1px solid var(--line);padding:10px 0 6px}
+.filt:first-child{border-top:0}
+.fhead{display:flex;gap:8px;align-items:center}
+.fhead select{width:auto;flex:1}
+.fhead button{min-height:40px;padding:0 14px}
+#msg{min-height:1.4em;font-size:14.5px;margin:6px 0 0}
+#msg.warn{color:#b42318}
+:root[data-theme=dark] #msg.warn{color:#ff8a80}
+progress{width:100%;height:8px;accent-color:var(--acc)}
+details.adv{margin-top:12px;border-top:1px solid var(--line);padding-top:4px}
+summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}
+.probe{position:absolute;width:0;height:0;overflow:hidden}
+.tabs{display:flex;gap:6px;align-items:center;margin:0 0 10px}
+.tabs button{min-height:38px;padding:0 16px}
+.tabs button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs .one{font:500 12px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:1px;text-transform:uppercase;color:var(--mut);padding:0 4px}
+#mic{position:absolute;right:0;top:8px;bottom:22px;width:4px;border-radius:2px;background:var(--line);overflow:hidden}
+#micfill{position:absolute;left:0;right:0;bottom:0;height:0;background:var(--acc);transition:height .08s linear}
+#mic.clip #micfill{background:#d92d20}
+#micfloor{position:absolute;left:0;right:0;height:2px;background:var(--ink)}
+footer{margin-top:40px;padding:24px 0 0;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+@media(max-width:600px){label.f{grid-template-columns:7em 1fr 4.2em}}
+@media(prefers-reduced-motion:reduce){#micfill{transition:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="logo" href="/" aria-label="arply settings"></a>
+  <a href="/" style="font-size:14px;font-weight:500;color:var(--mut);text-decoration:none">← Settings</a>
+</div></header>
+<div class="wrap">
+  <span class="eyebrow">Room calibration</span>
+  <h1>Tune arply to your room.</h1>
+  <p id="status">Connecting to arply …</p>
+  <p id="sendmsg"></p>
+
+  <div class="tabs" id="tabs"></div>
+  <div class="chartbox">
+    <div class="fig"><canvas id="cv" aria-label="Frequency response"></canvas><div id="mic" role="meter" aria-label="Microphone level" title="Microphone level (mark: background noise)" hidden><i id="micfill"></i><i id="micfloor" hidden></i></div></div>
+    <div id="readout"></div>
+    <div class="legend">
+      <span><i style="background:var(--meas)"></i>Measured (average)</span>
+      <span><i style="background:var(--quiet)"></i>Target</span>
+      <span><i style="background:var(--acc)"></i>EQ</span>
+      <span><i style="background:var(--ink)"></i>Result</span>
+      <span><i style="background:var(--band);height:10px;border:1px solid var(--accbg)"></i>Correction range</span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <span class="eyebrow">Step 1</span>
+      <h2>Measure</h2>
+      <p class="small" id="meashint">Hold the phone at ear height where you listen, microphone (bottom edge) towards the speaker, and stay quiet. arply plays test sweeps; the correction follows every measurement. Measure 3–5 positions around your seat.</p>
+      <div class="row"><button class="pri big" id="b-live">Measure</button></div>
+      <progress id="prog" value="0" max="1" hidden></progress>
+      <p id="msg"></p>
+      <div class="chips" id="meas"></div>
+      <div class="row"><button id="b-clear">Remove all</button></div>
+      <details class="adv">
+        <summary>Options</summary>
+        <label class="f">Output<select id="o-mode"><option value="stereo">Stereo</option><option value="mono">Mono</option><option value="left">Left only</option><option value="right">Right only</option></select><span></span></label>
+        <p class="small" id="modehint"></p>
+        <div class="row"><button id="b-level">Set level again</button></div>
+        <p class="small">Before the first measurement arply sets its level by itself: it listens to the room’s background noise, then raises its volume (the one AirPlay uses) from the lowest step until the test noise is clearly above it. The bar at the right of the chart shows the microphone. Each measurement plays three sweeps per channel (in stereo: left, right, left, …) and averages them.</p>
+      </details>
+    </section>
+
+    <section class="panel" id="corrpanel">
+      <span class="eyebrow">Step 2</span>
+      <h2>Correction</h2>
+      <div id="scopebox">
+        <div class="seg" id="scope" role="group" aria-label="What to correct"><button data-v="speaker">Room + speaker</button><button data-v="room">Room only</button></div>
+        <p class="small" id="scopehint" style="margin-top:8px"></p>
+      </div>
+      <p id="result"></p>
+      <p class="small" id="limitmsg"></p>
+      <details class="adv">
+        <summary id="filt-h">Filters</summary>
+        <div id="filters"></div>
+        <div class="row" id="filt-actions"><button id="b-fit">Recalculate</button><button id="b-undo" disabled>Undo</button><button id="b-add">Add filter</button></div>
+      </details>
+      <details class="adv" id="adv">
+        <summary>Advanced</summary>
+        <label class="f">From<input type="range" id="o-fmin" min="20" max="200" step="5"><output id="v-fmin"></output></label>
+        <label class="f">To<input type="range" id="o-fmax" min="500" max="16000" step="500"><output id="v-fmax"></output></label>
+        <label class="f">Bass in target<input type="range" id="o-tilt" min="0" max="8" step="0.5"><output id="v-tilt"></output></label>
+        <label class="f">Treble roll-off<input type="range" id="o-treble" min="0" max="3" step="0.25"><output id="v-treble"></output></label>
+        <label class="f">Smoothing<select id="o-detail"><option value="0.5">Coarse</option><option value="1">Normal</option><option value="2">Fine</option></select><span></span></label>
+        <label class="f">Max. filters<input type="range" id="o-maxn" min="1" max="10" step="1"><output id="v-maxn"></output></label>
+        <label class="f">Max. cut<input type="range" id="o-cut" min="3" max="18" step="1"><output id="v-cut"></output></label>
+        <label class="f">Max. boost<input type="range" id="o-boost" min="0" max="6" step="0.5"><output id="v-boost"></output></label>
+        <p class="small">Room modes – narrow peaks up to 500&nbsp;Hz – are only cut: filling dips does not work in a room. The speaker’s balance is corrected broadly, both ways, from the response smoothed over an octave in the bass and half an octave above 500&nbsp;Hz – but never boosted below the speaker’s bass limit: there bass enhancement takes over. Both share the filters; each stops once the rest is within about 1&nbsp;dB.</p>
+        <p class="small">The target lifts the bass below about 120&nbsp;Hz and rolls the treble off gently above 1&nbsp;kHz (per octave), as a well-balanced speaker measures in a room. The iPhone microphone rolls off below about 85&nbsp;Hz, so a dip there is never filled. Smoothing (room modes) uses 1/12 octave in the bass up to 150&nbsp;Hz, getting coarser up to 1/3 octave from 3&nbsp;kHz; “Fine” halves the windows, “Coarse” doubles them.</p>
+      </details>
+    </section>
+
+    <section class="panel">
+      <span class="eyebrow">Step 3 · optional</span>
+      <h2>Hear the difference</h2>
+      <div class="row"><button class="pri" id="b-play">Play on arply</button>
+        <div class="seg" id="ab" role="group" aria-label="Compare"><button data-v="0" aria-pressed="true">With correction</button><button data-v="1" aria-pressed="false">Without</button></div></div>
+      <label class="f">Sample<select id="o-sample"><option value="groove">Groove (built-in)</option><option value="tones">Bass tones 30–160 Hz</option><option value="noise">Pink noise</option></select><span></span></label>
+      <p class="small" id="samplehint"></p>
+      <label class="f">Volume<input type="range" id="o-vol2" min="-30" max="0" step="0.5"><output id="v-vol2"></output></label>
+      <p class="small" id="musicname"></p>
+      <p class="small">For your own music, play it to arply via AirPlay – the correction applies there too.</p>
+    </section>
+
+    <section class="panel" id="basspanel">
+      <span class="eyebrow">Optional · small speakers</span>
+      <h2>Bass enhancement</h2>
+      <p class="small">Lifts the real bass below the speaker’s limit, held back automatically near full scale, a little more at low volume. Only below a third of the limit is cut (there the driver just moves). Harmonics are optional: they add overtones of the deep bass above the limit, from which your ear fills in the note – start at 0 and raise them by ear.</p>
+      <label class="chk"><input type="checkbox" id="o-pbe"> Bass enhancement on</label>
+      <label class="f">Speaker limit<input type="range" id="o-pbefc" min="40" max="200" step="5"><output id="v-pbefc"></output></label>
+      <label class="f">Bass boost<input type="range" id="o-pbeboost" min="0" max="100" step="5"><output id="v-pbeboost"></output></label>
+      <label class="f">Harmonics<input type="range" id="o-pbeamt" min="0" max="100" step="5"><output id="v-pbeamt"></output></label>
+      <p class="small" id="pbemsg"></p>
+    </section>
+
+    <section class="panel" id="subpanel" hidden>
+      <span class="eyebrow">Subwoofer</span>
+      <h2>Crossover</h2>
+      <p class="small">This arply is its room’s subwoofer (set on the settings page). It plays the mono bass below the crossover; while it plays, the speakers in the same room get the matching high-pass and their bass block pauses (Linkwitz-Riley, 24 dB/octave).</p>
+      <label class="f">Crossover<input type="range" id="o-xo" min="40" max="200" step="5"><output id="v-xo"></output></label>
+      <label class="f">Level<input type="range" id="o-xogain" min="-12" max="12" step="0.5"><output id="v-xogain"></output></label>
+      <label class="f">Delay<input type="range" id="o-xodelay" min="0" max="20" step="0.1"><output id="v-xodelay"></output></label>
+      <label class="chk"><input type="checkbox" id="o-xoinv"> Invert polarity</label>
+      <p class="small" id="alignmsg">“Measure” in step 1 sets level, delay and polarity: each speaker of this room plays a sweep, then the subwoofer. A new crossover re-aligns from the measurements. Or set them by ear (1 ms ≈ 34 cm).</p>
+    </section>
+  </div>
+
+
+  <footer>
+    <span class="logo" role="img" aria-label="arply"></span>
+    <span class="small">An unofficial, open AirPlay receiver.</span>
+    <a class="small" href="https://arply.de" target="_blank" rel="noopener" style="color:var(--acc)">arply.de</a>
+  </footer>
+</div>
+<span class="probe" id="p-meas" style="color:var(--meas)"></span><span class="probe" id="p-mag" style="color:var(--acc)"></span><span class="probe" id="p-ink" style="color:var(--ink)"></span><span class="probe" id="p-mut" style="color:var(--quiet)"></span><span class="probe" id="p-sea" style="color:var(--band)"></span><span class="probe" id="p-line" style="color:var(--line)"></span>
+
+<script>
+/*DSP-START*/
+const DSP = (() => {
+  const TAU = 2 * Math.PI;
+  const nextPow2 = n => { let p = 1; while (p < n) p <<= 1; return p; };
+
+  function fft(re, im, inv) {
+    const n = re.length;
+    for (let i = 1, j = 0; i < n; i++) {
+      let b = n >> 1;
+      for (; j & b; b >>= 1) j ^= b;
+      j ^= b;
+      if (i < j) { let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; }
+    }
+    for (let len = 2; len <= n; len <<= 1) {
+      const ang = (inv ? TAU : -TAU) / len, wr = Math.cos(ang), wi = Math.sin(ang), h = len >> 1;
+      for (let i = 0; i < n; i += len) {
+        let cr = 1, ci = 0;
+        for (let k = 0; k < h; k++) {
+          const a = i + k, b = a + h;
+          const tr = re[b] * cr - im[b] * ci, ti = re[b] * ci + im[b] * cr;
+          re[b] = re[a] - tr; im[b] = im[a] - ti; re[a] += tr; im[a] += ti;
+          const nc = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = nc;
+        }
+      }
+    }
+    if (inv) for (let i = 0; i < n; i++) { re[i] /= n; im[i] /= n; }
+  }
+
+  // Exponential sine sweep (Farina)
+  function sweep(fs, T = 4, f1 = 20, f2 = 20000, amp = 0.25) {
+    const n = Math.round(T * fs), L = T / Math.log(f2 / f1), K = TAU * f1 * L;
+    const x = new Float32Array(n), fi = Math.round(0.01 * fs), fo = Math.round(0.005 * fs);
+    for (let i = 0; i < n; i++) {
+      let g = amp;
+      if (i < fi) g *= 0.5 - 0.5 * Math.cos(Math.PI * i / fi);
+      if (n - i < fo) g *= 0.5 - 0.5 * Math.cos(Math.PI * (n - i) / fo);
+      x[i] = g * Math.sin(K * (Math.exp(i / fs / L) - 1));
+    }
+    return { data: x, T, f1, f2, fs };
+  }
+
+  function bandWeight(f, lo, hi) {
+    const tw = 0.5; // half-octave taper
+    if (f <= 0) return 0;
+    const a = Math.log2(f / lo), b = Math.log2(hi / f);
+    let w = 1;
+    if (a < 0) w *= a < -tw ? 0 : 0.5 + 0.5 * Math.cos(Math.PI * a / tw);
+    if (b < 0) w *= b < -tw ? 0 : 0.5 + 0.5 * Math.cos(Math.PI * b / tw);
+    return w;
+  }
+
+  // Recording -> impulse response (sweep start in the recording = peak position)
+  function impulse(rec, sw, fs) {
+    const N = nextPow2(rec.length + sw.data.length);
+    const xr = new Float64Array(N), xi = new Float64Array(N), yr = new Float64Array(N), yi = new Float64Array(N);
+    xr.set(sw.data); yr.set(rec);
+    fft(xr, xi, false); fft(yr, yi, false);
+    let maxP = 0;
+    for (let k = 0; k <= N / 2; k++) maxP = Math.max(maxP, xr[k] * xr[k] + xi[k] * xi[k]);
+    const eps = maxP * 1e-6, lo = sw.f1 * 1.4, hi = Math.min(sw.f2 * 0.9, fs * 0.45);
+    for (let k = 0; k < N; k++) {
+      const f = (k <= N / 2 ? k : N - k) * fs / N, w = bandWeight(f, lo, hi);
+      const a = yr[k] * xr[k] + yi[k] * xi[k], b = yi[k] * xr[k] - yr[k] * xi[k];
+      const d = xr[k] * xr[k] + xi[k] * xi[k] + eps;
+      yr[k] = w * a / d; yi[k] = w * b / d;
+    }
+    fft(yr, yi, true);
+    // causal part only (harmonic distortion lands at negative times = end of the array)
+    return yr.subarray(0, Math.min(N, rec.length + Math.round(0.05 * fs)));
+  }
+
+  function argmaxAbs(h, a, b) {
+    a = Math.max(0, a); b = Math.min(h.length, b);
+    let p = -1, v = 0;
+    for (let i = a; i < b; i++) { const x = Math.abs(h[i]); if (x > v) { v = x; p = i; } }
+    return p;
+  }
+
+  // windowed impulse response around a peak -> power spectrum
+  function spectrumAt(h, peak, fs, winSec = 0.4) {
+    const pre = Math.round(0.002 * fs), L = Math.round(winSec * fs), M = nextPow2(L) * 2;
+    const hr = new Float64Array(M), hi = new Float64Array(M), fall = Math.round(L * 0.25);
+    for (let i = 0; i < L; i++) {
+      const src = peak - pre + i; if (src < 0 || src >= h.length) continue;
+      let w = 1;
+      if (i < pre) w = 0.5 - 0.5 * Math.cos(Math.PI * i / pre);
+      if (i > L - fall) w = 0.5 + 0.5 * Math.cos(Math.PI * (i - (L - fall)) / fall);
+      hr[i] = h[src] * w;
+    }
+    fft(hr, hi, false);
+    const P = new Float64Array(M / 2 + 1);
+    for (let k = 0; k <= M / 2; k++) P[k] = hr[k] * hr[k] + hi[k] * hi[k];
+    return { P, M, fs };
+  }
+
+  function deconvolve(rec, sw, fs, winSec = 0.4) {
+    const h = impulse(rec, sw, fs), peak = argmaxAbs(h, 0, h.length);
+    return { ...spectrumAt(h, peak, fs, winSec), delay: peak / fs };
+  }
+
+  // pink noise (Paul Kellet filter), scaled to an RMS level in dBFS
+  function pinkNoise(fs, sec, rmsDb = -15) {
+    const n = Math.round(fs * sec), x = new Float32Array(n);
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0, s = 0;
+    for (let i = 0; i < n; i++) {
+      const w = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759; b2 = 0.969 * b2 + w * 0.153852;
+      b3 = 0.8665 * b3 + w * 0.3104856; b4 = 0.55 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.016898;
+      x[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362; b6 = w * 0.115926; s += x[i] * x[i];
+    }
+    const g = Math.pow(10, rmsDb / 20) / Math.sqrt(s / n), fade = Math.round(0.02 * fs);
+    for (let i = 0; i < n; i++) {
+      let e = 1; if (i < fade) e = i / fade; if (n - i < fade) e = (n - i) / fade; // loop-friendly edges
+      x[i] *= g * e;
+    }
+    return x;
+  }
+
+  const logGrid = (a, b, n) => Array.from({ length: n }, (_, i) => a * Math.pow(b / a, i / (n - 1)));
+
+  // fractional-octave power average from FFT bins
+  function toGrid(P, M, fs, grid, frac) {
+    const cum = new Float64Array(P.length + 1);
+    for (let k = 0; k < P.length; k++) cum[k + 1] = cum[k] + P[k];
+    const r = Math.pow(2, 1 / (2 * frac));
+    return grid.map(f => {
+      let kl = Math.floor(f / r * M / fs), kh = Math.ceil(f * r * M / fs);
+      kl = Math.max(1, Math.min(kl, P.length - 2)); kh = Math.max(kl + 1, Math.min(kh, P.length - 1));
+      return 10 * Math.log10((cum[kh] - cum[kl]) / (kh - kl) + 1e-30);
+    });
+  }
+
+  // frequency-dependent smoothing: fine in the bass (room modes), coarse in the treble
+  // normal: 1/12 oct up to 150 Hz, falling to 1/3 oct at 3 kHz and above; detail scales it
+  function varFrac(f, detail = 1) {
+    const base = f <= 150 ? 12 : f >= 3000 ? 3 : 12 * Math.pow(3 / 12, Math.log(f / 150) / Math.log(20));
+    return Math.min(24, base * detail);
+  }
+
+  // further smoothing on the log grid (power domain); frac = number or function of f
+  function smoothGrid(db, grid, frac) {
+    const fr = typeof frac === 'function' ? frac : () => frac;
+    const lg = grid.map(Math.log2), p = db.map(d => Math.pow(10, d / 10));
+    return db.map((_, i) => {
+      const r = 1 / (2 * fr(grid[i]));
+      let s = 0, n = 0;
+      for (let j = i; j >= 0 && lg[i] - lg[j] <= r; j--) { s += p[j]; n++; }
+      for (let j = i + 1; j < db.length && lg[j] - lg[i] <= r; j++) { s += p[j]; n++; }
+      return 10 * Math.log10(s / n);
+    });
+  }
+
+  // highest frequency <= 300 Hz where the 1-octave-smoothed response is below -6 dB
+  // (= where the speaker's bass runs out); null if it never drops that far
+  function bassLimit(db, grid) {
+    const sm = smoothGrid(db, grid, 1);
+    for (let i = grid.length - 1; i >= 0; i--) if (grid[i] <= 300 && sm[i] < -6) return grid[i];
+    return null;
+  }
+
+  // Harmonic distortion from the same sweep (Farina): the k-th harmonic's
+  // impulse response lies L·ln(k) before the linear one (0.40 s for the 2nd,
+  // 0.93 s for the 5th with a 4 s sweep). Returns THD (2nd–5th harmonic, dB
+  // re the fundamental, 1/3 octave) per grid frequency up to 300 Hz. Where
+  // the harmonics are below 3× the noise (five windows 1.15–1.55 s before
+  // the peak; fewer gave false alarms in simulation), the value is the upper
+  // bound that noise allows if that is below 10 %, else null. h must reach
+  // DIST_PRE seconds before p. Same 0.1 s window for all, so the room's
+  // reverb counts equally in fundamental and harmonics.
+  const DIST_PRE = 1.6;
+  function distortion(h, p, sw, fs, grid) {
+    const L = sw.T / Math.log(sw.f2 / sw.f1), lead = Math.round(0.018 * fs);
+    const spec = t => spectrumAt(h, p + Math.round(t * fs) - lead, fs, 0.1); // window from 20 ms before
+    const band = (sp, k) => toGrid(sp.P, sp.M, fs, grid.map(f => f * k), 3).map(d => Math.pow(10, d / 10));
+    const nw = [-1.55, -1.45, -1.35, -1.25, -1.15].map(spec), ns = { ...nw[0], P: nw[0].P.map((_, j) => nw.reduce((a, w) => a + w.P[j], 0) / nw.length) };
+    const lin = band(spec(0), 1), harm = grid.map(() => 0), noise = grid.map(() => 0);
+    for (let k = 2; k <= 5; k++) {
+      const hk = band(spec(-L * Math.log(k)), k), nk = band(ns, k);
+      grid.forEach((_, i) => { harm[i] += hk[i]; noise[i] += nk[i]; });
+    }
+    return grid.map((f, i) => {
+      if (f > 300) return null;
+      const ok = harm[i] >= 3 * noise[i], db = 10 * Math.log10((ok ? harm[i] - noise[i] : 3 * noise[i]) / lin[i]);
+      return ok || db < -20 ? Math.round(db * 10) / 10 : null;
+    });
+  }
+  // highest frequency <= 300 Hz with more than 10 % distortion; null if none
+  function distLimit(thd, grid) {
+    for (let i = grid.length - 1; i >= 0 && grid[i] >= 40; i--) if (grid[i] <= 300 && thd[i] !== null && thd[i] > -20) return grid[i];
+    return null;
+  }
+
+  function normalize(db, grid, a = 200, b = 2000) {
+    let s = 0, n = 0;
+    grid.forEach((f, i) => { if (f >= a && f <= b) { s += db[i]; n++; } });
+    const m = n ? s / n : 0;
+    return db.map(d => d - m);
+  }
+
+  // RBJ cookbook biquads; shelves fixed at S=1 (Q=1/sqrt2) to match WebAudio
+  function coeffs(t, f, gain, q, fs) {
+    const A = Math.pow(10, gain / 40), w = TAU * f / fs, c = Math.cos(w), s = Math.sin(w);
+    const Q = (t === 'ls' || t === 'hs') ? Math.SQRT1_2 : q, al = s / (2 * Q);
+    let b0, b1, b2, a0, a1, a2;
+    if (t === 'peak') { b0 = 1 + al * A; b1 = -2 * c; b2 = 1 - al * A; a0 = 1 + al / A; a1 = -2 * c; a2 = 1 - al / A; }
+    else if (t === 'ls') { const r = 2 * Math.sqrt(A) * al;
+      b0 = A * ((A + 1) - (A - 1) * c + r); b1 = 2 * A * ((A - 1) - (A + 1) * c); b2 = A * ((A + 1) - (A - 1) * c - r);
+      a0 = (A + 1) + (A - 1) * c + r; a1 = -2 * ((A - 1) + (A + 1) * c); a2 = (A + 1) + (A - 1) * c - r; }
+    else if (t === 'hs') { const r = 2 * Math.sqrt(A) * al;
+      b0 = A * ((A + 1) + (A - 1) * c + r); b1 = -2 * A * ((A - 1) + (A + 1) * c); b2 = A * ((A + 1) + (A - 1) * c - r);
+      a0 = (A + 1) - (A - 1) * c + r; a1 = 2 * ((A - 1) - (A + 1) * c); a2 = (A + 1) - (A - 1) * c - r; }
+    else if (t === 'hp') { b0 = (1 + c) / 2; b1 = -(1 + c); b2 = (1 + c) / 2; a0 = 1 + al; a1 = -2 * c; a2 = 1 - al; }
+    else { b0 = (1 - c) / 2; b1 = 1 - c; b2 = (1 - c) / 2; a0 = 1 + al; a1 = -2 * c; a2 = 1 - al; } // lp
+    return { b0: b0 / a0, b1: b1 / a0, b2: b2 / a0, a1: a1 / a0, a2: a2 / a0 };
+  }
+
+  function magDb(k, f, fs) {
+    const w = TAU * f / fs, c1 = Math.cos(w), s1 = Math.sin(w), c2 = Math.cos(2 * w), s2 = Math.sin(2 * w);
+    const nr = k.b0 + k.b1 * c1 + k.b2 * c2, ni = -(k.b1 * s1 + k.b2 * s2);
+    const dr = 1 + k.a1 * c1 + k.a2 * c2, di = -(k.a1 * s1 + k.a2 * s2);
+    return 10 * Math.log10((nr * nr + ni * ni) / (dr * dr + di * di));
+  }
+
+  // complex response of a biquad at f
+  function bqC(k, f, fs) {
+    const w = TAU * f / fs, c1 = Math.cos(w), s1 = Math.sin(w), c2 = Math.cos(2 * w), s2 = Math.sin(2 * w);
+    const nr = k.b0 + k.b1 * c1 + k.b2 * c2, ni = -(k.b1 * s1 + k.b2 * s2), dr = 1 + k.a1 * c1 + k.a2 * c2, di = -(k.a1 * s1 + k.a2 * s2), d = dr * dr + di * di;
+    return [(nr * dr + ni * di) / d, (ni * dr - nr * di) / d];
+  }
+  const cmul = (a, b) => [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]];
+  // Subwoofer alignment (FLEET_PLAN F6). alignSpectra keeps, per
+  // measurement, the spectra (20-400 Hz) of the speakers (summed) and the
+  // subwoofer, from impulse responses cut out at the same place relative to
+  // their planned sweep starts, at equal volume: a new crossover re-aligns
+  // without measuring again.
+  function alignSpectra(hMain, hSub, fs) {
+    const M = nextPow2(Math.max(hMain.length, hSub.length)) * 2, spec = h => {
+      const re = new Float64Array(M), im = new Float64Array(M); re.set(h); fft(re, im, false); return [re, im]; };
+    const [ar, ai] = spec(hMain), [br, bi] = spec(hSub), r5 = v => +v.toPrecision(5), out = { fs, M, k0: Math.ceil(20 * M / fs), a: [], b: [] };
+    for (let k = out.k0; k <= Math.floor(400 * M / fs); k++) { out.a.push(r5(ar[k]), r5(ai[k])); out.b.push(r5(br[k]), r5(bi[k])); }
+    return out;
+  }
+  // With the LR4 crossover at xo: subwoofer level equal at the crossover
+  // (+-1/6 octave), then delay (0-20 ms) and polarity with the most energy
+  // from xo/2 to 2 xo, summed over all measured positions. Of the local
+  // maxima within 0.2 dB of the best the earliest wins (a period later
+  // lines up the phase at xo but smears the attack). needMs > 0: the
+  // subwoofer would have to play that much EARLIER (it stands farther away).
+  function alignRuns(runs, xo) {
+    const bands = runs.map(r => {
+      const hp = coeffs('hp', xo, 0, Math.SQRT1_2, r.fs), lp = coeffs('lp', xo, 0, Math.SQRT1_2, r.fs), A = [], B = [], F = [];
+      for (let i = 0; i < r.a.length / 2; i++) {
+        const f = (r.k0 + i) * r.fs / r.M; if (f < xo / 2 || f > 2 * xo) continue;
+        const h = bqC(hp, f, r.fs), l = bqC(lp, f, r.fs);
+        A.push(cmul([r.a[2 * i], r.a[2 * i + 1]], cmul(h, h))); B.push(cmul([r.b[2 * i], r.b[2 * i + 1]], cmul(l, l))); F.push(f);
+      }
+      return { A, B, F };
+    });
+    let pa = 0, pb = 0;
+    for (const { A, B, F } of bands) F.forEach((f, i) => { if (f >= xo / 1.12 && f <= xo * 1.12) { pa += A[i][0] ** 2 + A[i][1] ** 2; pb += B[i][0] ** 2 + B[i][1] ** 2; } });
+    const g = Math.sqrt(pa / Math.max(1e-30, pb));
+    const energy = (d, pol) => { let e = 0; for (const { A, B, F } of bands) F.forEach((f, i) => {
+      const ph = -TAU * f * d / 1000, c = Math.cos(ph), sn = Math.sin(ph), br2 = pol * g * (B[i][0] * c - B[i][1] * sn), bi2 = pol * g * (B[i][0] * sn + B[i][1] * c);
+      e += (A[i][0] + br2) ** 2 + (A[i][1] + bi2) ** 2; }); return e; };
+    const peaks = [];
+    for (const pol of [1, -1]) {
+      const E = []; for (let i = 0; i <= 400; i++) E.push(energy(i * 0.05, pol));
+      E.forEach((e, i) => { if ((i === 0 || e >= E[i - 1]) && (i === 400 || e >= E[i + 1])) peaks.push({ d: i * 0.05, pol, e }); });
+    }
+    const top = Math.max(...peaks.map(p => p.e)), best = peaks.filter(p => p.e >= top / 1.047).sort((x, y) => x.d - y.d)[0];
+    let early = null;
+    for (let d = -0.05; d >= -20; d -= 0.05) for (const pol of [1, -1]) { const e = energy(d, pol); if (!early || e > early.e) early = { d, pol, e }; }
+    let ideal = 0; for (const { A, B } of bands) A.forEach((a, i) => { ideal += (Math.hypot(a[0], a[1]) + g * Math.hypot(B[i][0], B[i][1])) ** 2; });
+    return { gainDb: 20 * Math.log10(g), delayMs: Math.round(best.d * 100) / 100, invert: best.pol < 0, sumDb: 10 * Math.log10(best.e / ideal),
+      needMs: early.e > best.e * 1.26 ? Math.round(-early.d * 10) / 10 : 0 };
+  }
+  // one position, straight from the two responses (tests, single runs)
+  const alignSub = (hMain, hSub, fs, xo) => alignRuns([alignSpectra(hMain, hSub, fs)], xo);
+
+  function eqCurve(filters, grid, fs) {
+    const out = new Array(grid.length).fill(0);
+    for (const f of filters) {
+      if (!f.on) continue;
+      const k = coeffs(f.type, f.f, f.gain, f.q, fs);
+      grid.forEach((x, i) => { out[i] += magDb(k, x, fs); });
+    }
+    return out;
+  }
+
+  // target: a bass lift below ~120 Hz and a gentle treble roll-off above
+  // 1 kHz (dB per octave), as a good speaker measures in a room
+  const target = (f, tilt, treble = 0) => tilt / (1 + (f / 120) * (f / 120)) - treble * Math.max(0, Math.log2(f / 1000));
+
+  // One greedy pass + coordinate-descent refinement over [lo, hi] of meas
+  // (already smoothed), on top of the fixed filters. At and above `floor`
+  // deviations count both ways (boosts up to gmax per filter and `cap` in
+  // sum); below it only peaks count: dips are left alone, and changing them
+  // is penalized. `spread` (octaves) keeps new filters off existing ones.
+  function fitPass(meas, grid, tg, p, fixed) {
+    const fs = p.fs, idx = [];
+    grid.forEach((f, i) => { if (f >= p.lo && f <= p.hi) idx.push(i); });
+    if (!idx.length || p.n <= 0) return [];
+    const respOf = flt => { const k = coeffs('peak', flt.f, flt.gain, flt.q, fs); return idx.map(i => magDb(k, grid[i], fs)); };
+    const fix = idx.map(() => 0);
+    for (const f of fixed) respOf(f).forEach((v, j) => { fix[j] += v; });
+    const r0 = idx.map((i, j) => meas[i] + fix[j] - tg[i]), both = idx.map(i => grid[i] >= p.floor);
+    const cap = p.cap === undefined ? Infinity : p.cap;
+    const filters = [], resp = [];
+    const others = skip => idx.map((_, j) => resp.reduce((s, r, n) => n === skip ? s : s + r[j], 0));
+    const errWith = (base, r) => r0.reduce((s, d, j) => {
+      const e = d + base[j] + r[j], over = fix[j] + base[j] + r[j] - cap;
+      if (over > 0) s += 100 * over * over;
+      if (both[j]) return s + e * e;
+      const pos = Math.max(e, 0), neg = Math.min(e, 0) - Math.min(d, 0);
+      return s + pos * pos + neg * neg; }, 0);
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    function refine(flt, base) {
+      const q0 = [Math.log(flt.f), flt.gain, Math.log(flt.q)], st = [0.06, 0.6, 0.2];
+      const lim = [[Math.log(p.lo * 0.8), Math.log(p.hi * 1.2)], [p.gmin, p.gmax], [Math.log(p.qmin), Math.log(p.qmax)]];
+      const mk = q => ({ type: 'peak', on: true, f: Math.exp(q[0]), gain: q[1], q: Math.exp(q[2]) });
+      let best = errWith(base, respOf(mk(q0)));
+      for (let it = 0; it < 120 && st[0] > 0.002; it++) {
+        let imp = false;
+        for (let d = 0; d < 3; d++) for (const sg of [1, -1]) {
+          const q = q0.slice(); q[d] = clamp(q[d] + sg * st[d], lim[d][0], lim[d][1]);
+          const e = errWith(base, respOf(mk(q)));
+          if (e < best - 1e-9) { best = e; q0[d] = q[d]; imp = true; }
+        }
+        if (!imp) for (let d = 0; d < 3; d++) st[d] /= 2;
+      }
+      return mk(q0);
+    }
+    for (let n = 0; n < p.n; n++) {
+      const base = others(-1), rr = j => r0[j] + base[j];
+      let im = -1, rm = 0;
+      idx.forEach((_, j) => {
+        const v = rr(j);
+        if (v < 0 && !(both[j] && p.gmax > 0 && fix[j] + base[j] < cap - 0.5)) return;
+        if (p.spread && filters.some(f => Math.abs(Math.log2(grid[idx[j]] / f.f)) < p.spread)) return;
+        if (Math.abs(v) > Math.abs(rm)) { rm = v; im = j; }
+      });
+      if (im < 0 || Math.abs(rm) < p.stop) break;
+      const same = j => rr(j) * Math.sign(rm) > Math.abs(rm) / 2;
+      let l = im, h = im;
+      while (l > 0 && same(l)) l--;
+      while (h < idx.length - 1 && same(h)) h++;
+      const f0 = grid[idx[im]], bw = Math.max(grid[idx[h]] - grid[idx[l]], f0 / 12);
+      const flt = refine({ type: 'peak', on: true, f: f0, gain: clamp(-rm, p.gmin, p.gmax), q: clamp(f0 / bw, p.qmin, p.qmax) }, base);
+      filters.push(flt); resp.push(respOf(flt));
+    }
+    for (let pass = 0; pass < 2; pass++)
+      filters.forEach((flt, n) => { const nf = refine(flt, others(n)); filters[n] = nf; resp[n] = respOf(nf); });
+    return filters;
+  }
+
+  // Two passes sharing maxN: first the speaker (broad deviations, both ways,
+  // boosts at most maxBoost in sum and never below o.floor: there bass
+  // enhancement takes over), then the room (narrow peaks up to o.roomHi,
+  // cuts only) with what is left. The speaker pass sees the response
+  // smoothed over an octave in the bass and half an octave above 500 Hz, so
+  // narrow room dips do not count as the speaker's. Each pass stops once the
+  // largest remaining deviation is small.
+  function autoFit(meas, grid, o) {
+    const tg = grid.map(f => target(f, o.tilt, o.treble || 0)), P = { fs: o.fs, lo: o.fmin, gmin: -o.maxCut };
+    const speaker = o.speaker ? fitPass(smoothGrid(meas, grid, f => f < 500 ? 1 : 2), grid, tg,
+      { ...P, hi: o.fmax, floor: o.floor, gmax: o.maxBoost, cap: o.maxBoost, spread: 1 / 3, qmin: 0.4, qmax: 1.5, n: o.maxN, stop: 1.5 }, []) : [];
+    const room = fitPass(meas, grid, tg,
+      { ...P, hi: Math.min(o.fmax, o.roomHi || 500), floor: Infinity, gmax: 0, qmin: 0.4, qmax: 12, n: o.maxN - speaker.length, stop: 1.0 }, speaker);
+    return speaker.concat(room).filter(f => Math.abs(f.gain) > 0.5).sort((a, b) => a.f - b.f)
+      .map(f => ({ ...f, f: Math.round(f.f * 10) / 10, gain: Math.round(f.gain * 10) / 10, q: Math.round(f.q * 100) / 100 }));
+  }
+
+  function biquadRun(x, k) {
+    const y = new Float32Array(x.length); let x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+    for (let i = 0; i < x.length; i++) {
+      const v = k.b0 * x[i] + k.b1 * x1 + k.b2 * x2 - k.a1 * y1 - k.a2 * y2;
+      x2 = x1; x1 = x[i]; y2 = y1; y1 = v; y[i] = v;
+    }
+    return y;
+  }
+
+  // Synthetic room: speaker + room modes + iPhone mic high-pass, delay, noise
+  const DEMO_CHAIN = [['hp', 50, 0, 0.8], ['peak', 64, 9, 6], ['peak', 96, 6, 4], ['peak', 142, -10, 5],
+    ['peak', 230, 4, 3], ['hs', 6000, -3, 0], ['hp', 85, 0, 0.7]];
+  function simulate(fs, variant = 0, reflections = true, chanSeed = 0) {
+    const sw = sweep(fs), rnd = (a => () => (a = (a * 16807) % 2147483647) / 2147483647)(variant * 7919 + chanSeed * 104729 + 13);
+    let y = sw.data;
+    for (const [t, f, g, q] of DEMO_CHAIN) {
+      const gg = t === 'peak' && (variant || chanSeed) ? g * (0.7 + 0.6 * rnd()) : g;
+      y = biquadRun(y, coeffs(t, f, gg, q, fs));
+    }
+    const delay = Math.round(0.35 * fs), out = new Float32Array(sw.data.length + delay + Math.round(1.5 * fs));
+    const refl = reflections ? [[Math.round(0.0037 * fs), 0.25], [Math.round(0.0091 * fs), 0.15]] : [];
+    for (let i = 0; i < y.length; i++) {
+      out[i + delay] += y[i];
+      for (const [d, g] of refl) if (i + delay + d < out.length) out[i + delay + d] += g * y[i];
+    }
+    for (let i = 0; i < out.length; i++) out[i] += (rnd() - 0.5) * 2e-4;
+    return out;
+  }
+
+  return { alignSpectra, alignRuns, alignSub, bassLimit, distortion, distLimit, DIST_PRE, varFrac, fft, sweep, impulse, argmaxAbs, spectrumAt, deconvolve, pinkNoise, logGrid, toGrid, smoothGrid, normalize, coeffs, magDb, eqCurve, target, autoFit, simulate, DEMO_CHAIN };
+})();
+/*DSP-END*/
+
+// Built-in listening samples, synthesized in the browser (no files, no copyright)
+const SAMPLE_HINT = {
+  groove: 'Original 4-bar loop with kick, deep bassline (41–62 Hz), snare, hi-hat and chords – good for judging bass enhancement and EQ.',
+  tones: 'Single sine tones from 30 to 160 Hz. Room modes stand out as booming notes, dips as nearly silent ones.',
+  noise: 'Even noise across all frequencies – shows tonal balance, not pleasant to listen to.'
+};
+const TONES_HZ = [30, 35, 40, 45, 50, 55, 60, 65, 70, 80, 90, 100, 110, 120, 140, 160];
+function makeSample(c, kind) {
+  const fs = c.sampleRate, TAU = 2 * Math.PI;
+  if (kind === 'noise') {
+    const d = DSP.pinkNoise(fs, 6, -18), b = c.createBuffer(2, d.length, fs);
+    b.copyToChannel(d, 0); b.copyToChannel(d, 1); return b;
+  }
+  if (kind === 'tones') {
+    const dur = 0.9, n = Math.round(dur * fs), b = c.createBuffer(2, n * TONES_HZ.length, fs), d = new Float32Array(b.length);
+    TONES_HZ.forEach((f, k) => {
+      for (let i = 0; i < n; i++) {
+        const t = i / fs, e = Math.min(1, t / 0.05, (dur - 0.15 - t) / 0.05);
+        d[k * n + i] = 0.25 * Math.max(0, e) * Math.sin(TAU * f * t);
+      }
+    });
+    b.copyToChannel(d, 0); b.copyToChannel(d, 1); return b;
+  }
+  // groove: 4 bars at 100 bpm
+  const bpm = 100, beat = 60 / bpm, len = Math.round(16 * beat * fs), L = new Float32Array(len), R = new Float32Array(len);
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647 * 2 - 1;
+  const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+  const add = (at, n, fn, gl, gr) => { const s0 = Math.round(at * fs); for (let i = 0; i < n && s0 + i < len; i++) { const v = fn(i / fs); L[s0 + i] += v * gl; R[s0 + i] += v * gr; } };
+  for (let b = 0; b < 16; b++) {
+    const t0 = b * beat;
+    // kick: pitch drop 110 -> 45 Hz
+    add(t0, Math.round(0.4 * fs), t => { const ph = TAU * (45 * t + 65 * 0.03 * (1 - Math.exp(-t / 0.03))); return 0.9 * Math.exp(-t / 0.12) * Math.sin(ph); }, 1, 1);
+    // snare on 2 and 4: noise + 190 Hz body
+    if (b % 2 === 1) add(t0, Math.round(0.25 * fs), t => Math.exp(-t / 0.06) * (0.35 * rnd() + 0.3 * Math.sin(TAU * 190 * t)), 0.9, 0.9);
+    // hi-hat on eighths: differentiated noise, slightly right
+    for (const h of [0, 0.5]) { let prev = 0; add(t0 + h * beat, Math.round(0.05 * fs), t => { const x = rnd(), y = x - prev; prev = x; return 0.12 * Math.exp(-t / 0.012) * y; }, 0.6, 1); }
+  }
+  // bass line (eighths) in E minor, MIDI 28 = E1 (41 Hz) .. 35 = B1 (62 Hz)
+  const line = [28, 28, 31, 28, 33, 28, 31, 35];
+  for (let k = 0; k < 32; k++) {
+    const f = hz(line[k % 8]), dur = beat * 0.45;
+    add(k * beat / 2, Math.round(dur * fs), t => {
+      const e = Math.min(1, t / 0.005) * Math.exp(-t / 0.25) * Math.min(1, (dur - t) / 0.02);
+      return 0.55 * e * (Math.sin(TAU * f * t) + 0.35 * Math.sin(TAU * 2 * f * t) + 0.12 * Math.sin(TAU * 3 * f * t));
+    }, 1, 1);
+  }
+  // soft chord pad per bar: Em, C, G, D (mid range reference)
+  [[52, 55, 59], [48, 52, 55], [55, 59, 62], [50, 54, 57]].forEach((ch, bar) => {
+    const dur = 4 * beat;
+    add(bar * dur, Math.round(dur * fs), t => {
+      const e = Math.min(1, t / 0.3, (dur - t) / 0.3);
+      return 0.06 * e * ch.reduce((s, m, i) => s + Math.sin(TAU * hz(m) * t + i), 0);
+    }, 0.8, 1);
+  });
+  let pk = 0; for (let i = 0; i < len; i++) pk = Math.max(pk, Math.abs(L[i]), Math.abs(R[i]));
+  const g = 0.5 / pk; for (let i = 0; i < len; i++) { L[i] *= g; R[i] *= g; }
+  const b = c.createBuffer(2, len, fs); b.copyToChannel(L, 0); b.copyToChannel(R, 1); return b;
+}
+
+{
+  const $ = s => document.querySelector(s);
+  let FS = 44100; // arply output rate, replaced by GET /api/dsp
+  const grid = DSP.logGrid(20, 20000, 320);
+  const fmtDb = v => (v > 0 ? '+' : '') + v.toFixed(1) + ' dB';
+  const fmtHz = f => f >= 1000 ? (f / 1000).toFixed(f >= 10000 ? 0 : 1) + ' kHz' : Math.round(f) + ' Hz';
+  const CH_NAME = { L: 'Left', R: 'Right', M: 'Mono' };
+  const MODES = { stereo: ['L', 'R'], mono: ['M'], left: ['L'], right: ['R'] };
+  const MODE_HINT = {
+    stereo: 'Each channel is measured separately and gets its own filters.',
+    mono: 'Both outputs play the same signal – measured together, one filter set for both.',
+    left: 'The left source channel plays on both outputs – one filter set, measured on both outputs together.',
+    right: 'The right source channel plays on both outputs – one filter set, measured on both outputs together.'
+  };
+  const DEF_OPT = { scope: 'speaker', fmin: 40, fmax: 10000, tilt: 2, treble: 1, detail: 1, maxN: 10, maxCut: 12, maxBoost: 4, mode: 'stereo', bass: { on: false, f: 120, boost: 50, harm: 0 }, sub: { xo: 80, gain: 0, delay: 0, inv: false } };
+  const LEAD = 0.5;
+  const newCh = () => ({ meas: [], filters: [] });
+
+  let S = null;
+  try { S = JSON.parse(localStorage.getItem('arply-eq')); } catch (e) {}
+  if (!S || typeof S !== 'object') S = {};
+  S.opt = { ...DEF_OPT, ...(S.opt || {}) }; delete S.opt.frac;
+  S.opt.bass = { ...DEF_OPT.bass, ...(S.opt.bass || {}) }; delete S.opt.pbe;
+  S.opt.sub = { ...DEF_OPT.sub, ...(S.opt.sub || {}) };
+  // v3: the correction covers the speaker too (was 40–500 Hz with 6 filters)
+  const UPGRADED = S.v !== 3; // recalculated once arply answers, see start
+  if (UPGRADED) { S.opt.fmax = DEF_OPT.fmax; S.opt.maxN = DEF_OPT.maxN; S.v = 3; }
+  // set by arply's fleet: this device is a subwoofer, or one plays in its room
+  let ROLE = 'main', ROOM_HP = 0;
+  const isSub = () => ROLE === 'bass';
+  if (![0.5, 1, 2].includes(S.opt.detail)) S.opt.detail = 1;
+  S.ch = S.ch || {};
+  if (S.meas) { S.ch.M = { meas: S.meas, filters: S.filters || [] }; delete S.meas; delete S.filters; } // v1 data
+  for (const k of ['L', 'R', 'M']) S.ch[k] = S.ch[k] || newCh();
+  // older saved data has no run id: pair measurements by position
+  for (const k of ['L', 'R', 'M']) S.ch[k].meas.forEach((m, i) => { if (m.run === undefined) m.run = 'p' + i; });
+  const chans = () => MODES[S.opt.mode] || MODES.stereo;
+  const fixView = () => { if (!chans().includes(S.view)) S.view = chans()[0]; };
+  fixView();
+  const cur = () => S.ch[S.view];
+  const save = () => { try { localStorage.setItem('arply-eq', JSON.stringify(S)); } catch (e) {} };
+  let undo = null, ctx = null, busy = false;
+  const getCtx = () => (ctx = ctx || new (window.AudioContext || window.webkitAudioContext)());
+  const msg = (t, warn) => { const m = $('#msg'); m.textContent = t; m.className = warn ? 'warn' : ''; };
+  // Impulse responses of consecutive sweeps lie SWEEP_T + GAP apart in the
+  // deconvolved recording, so the room's reverb and the next sweep's
+  // distortion stay clear of the 0.4 s window even with a short pause.
+  // REPEAT sweeps averaged: as accurate at 5 dB margin as one at 10 dB (simulated).
+  const GAP = 0.5, REPEAT = 3;
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const micOk = () => !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.isSecureContext);
+  async function getMic() {
+    return navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+  }
+
+  // ---------- derived curves ----------
+  function avgMeas(k = S.view) {
+    const ms = S.ch[k].meas; if (!ms.length) return null;
+    const sm = ms.map(m => DSP.smoothGrid(m.db, grid, f => DSP.varFrac(f, S.opt.detail)));
+    return { each: sm, avg: grid.map((_, i) => sm.reduce((s, d) => s + d[i], 0) / sm.length) };
+  }
+  const preampOf = eq => { const mx = Math.max(0, ...eq); return mx > 0 ? -Math.ceil(mx * 2) / 2 : 0; };
+  // one common preamp for all active channels keeps the balance
+  const preampAll = () => Math.min(0, ...chans().map(k => preampOf(DSP.eqCurve(S.ch[k].filters, grid, FS))));
+  // what the correction covers: a subwoofer up to twice its crossover, the
+  // room alone up to 500 Hz, the room and the speaker up to "To"
+  const speakerScope = () => !isSub() && S.opt.scope !== 'room';
+  const rangeLo = () => isSub() ? 20 : S.opt.fmin;
+  const rangeHi = () => isSub() ? 2 * S.opt.sub.xo : speakerScope() ? S.opt.fmax : Math.min(S.opt.fmax, 500);
+  const targetOf = f => DSP.target(f, S.opt.tilt, isSub() ? 0 : S.opt.treble);
+  // the speaker's bass limit from a channel's measurements: its −6 dB
+  // roll-off (from 85 Hz up: below, the phone microphone rolls off itself)
+  // or three times the frequency below which it distorts > 10 %; 0 = none
+  function speakerLimit(k) {
+    const am = avgMeas(k); if (!am) return { f: 0 };
+    const ro = DSP.bassLimit(am.avg, grid), t = avgThd(k), ds = t ? DSP.distLimit(t, grid) : null;
+    return { f: Math.max(ro >= 85 ? ro : 0, 3 * (ds || 0)), ro, ds };
+  }
+  // boosts start a bit above the limit, never below 120 Hz
+  const floorOf = k => speakerScope() ? 1.2 * Math.max(100, speakerLimit(k).f) : Infinity;
+  // RMS off target over the range, counted like the fit: peaks everywhere,
+  // dips (half-octave smoothed) only where the correction may boost
+  function dev(arr, tg, floor) {
+    const sm = DSP.smoothGrid(arr, grid, 2);
+    let s = 0, n = 0;
+    grid.forEach((f, i) => {
+      if (f < rangeLo() || f > rangeHi()) return;
+      const up = Math.max(0, arr[i] - tg[i]), dn = f >= floor ? Math.min(0, sm[i] - tg[i]) : 0;
+      s += up * up + dn * dn; n++;
+    });
+    return n ? Math.sqrt(s / n) : 0;
+  }
+
+  // ---------- chart ----------
+  const col = id => getComputedStyle($(id)).color;
+  let cache = null;
+  function draw() {
+    const c = $('#cv'), W = c.clientWidth, H = c.clientHeight, dpr = window.devicePixelRatio || 1;
+    if (!W || !H) return;
+    c.width = W * dpr; c.height = H * dpr;
+    const g = c.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+    const C = { brown: col('#p-meas'), mag: col('#p-mag'), ink: col('#p-ink'), mut: col('#p-mut'), sea: col('#p-sea'), line: col('#p-line') };
+    const pl = 34, pr = 8, pt = 8, pb = 22, y0 = -24, y1 = 15;
+    const X = f => pl + Math.log(f / 20) / Math.log(1000) * (W - pl - pr);
+    const Y = d => pt + (y1 - Math.max(y0, Math.min(y1, d))) / (y1 - y0) * (H - pt - pb);
+    g.fillStyle = C.sea; g.fillRect(X(rangeLo()), pt, X(rangeHi()) - X(rangeLo()), H - pt - pb);
+    g.font = '12px Inter, system-ui, sans-serif'; g.lineWidth = 1;
+    const fx = W < 520 ? [50, 100, 500, 1000, 5000, 10000] : [20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000];
+    g.strokeStyle = C.line; g.fillStyle = C.mut; g.textAlign = 'center';
+    for (const f of fx) { g.beginPath(); g.moveTo(X(f), pt); g.lineTo(X(f), H - pb); g.stroke();
+      g.fillText(f >= 1000 ? f / 1000 + 'k' : String(f), Math.min(W - 10, Math.max(pl + 8, X(f))), H - 6); }
+    g.textAlign = 'right';
+    for (let d = -24; d <= 12; d += 6) { g.beginPath(); g.moveTo(pl, Y(d)); g.lineTo(W - pr, Y(d)); g.stroke(); g.fillText(String(d), pl - 5, Y(d) + 4); }
+    const line = (arr, color, w, dash) => { g.strokeStyle = color; g.lineWidth = w; g.setLineDash(dash || []); g.beginPath();
+      arr.forEach((d, i) => { const x = X(grid[i]), y = Y(d); i ? g.lineTo(x, y) : g.moveTo(x, y); }); g.stroke(); g.setLineDash([]); };
+    const tg = grid.map(targetOf);
+    const eq = DSP.eqCurve(cur().filters, grid, FS), pre = preampAll();
+    line(tg, C.mut, 1.5, [5, 4]);
+    const am = avgMeas();
+    cache = { tg, eq, am, pre };
+    line(eq.map(e => e + pre), C.mag, 2);
+    if (isSub() || ROOM_HP) {
+      // crossover: the subwoofer's low-pass with its level, or the speakers' high-pass
+      const fx = isSub() ? S.opt.sub.xo : ROOM_HP, k = DSP.coeffs(isSub() ? 'lp' : 'hp', fx, 0, Math.SQRT1_2, FS);
+      line(grid.map((f, i) => 2 * DSP.magDb(k, f, FS) + (isSub() ? S.opt.sub.gain : 0) + eq[i] + pre), C.mag, 1.5, [3, 3]);
+      const x = X(fx); g.strokeStyle = C.mag; g.lineWidth = 1; g.setLineDash([2, 4]);
+      g.beginPath(); g.moveTo(x, pt); g.lineTo(x, H - pb); g.stroke(); g.setLineDash([]);
+      g.fillStyle = C.mag; g.textAlign = 'left'; g.font = '12px Inter, system-ui, sans-serif';
+      g.fillText('Crossover', x + 4, Y(13));
+    } else if (pbeActive()) {
+      // the bass block at full boost (quiet passages); loud ones get less
+      line(bassCurve().map((b, i) => b + eq[i] + pre), C.mag, 1.5, [3, 3]);
+      const x = X(S.opt.bass.f); g.strokeStyle = C.mag; g.lineWidth = 1; g.setLineDash([2, 4]);
+      g.beginPath(); g.moveTo(x, pt); g.lineTo(x, H - pb); g.stroke(); g.setLineDash([]);
+      g.fillStyle = C.mag; g.textAlign = 'left'; g.font = '12px Inter, system-ui, sans-serif';
+      g.fillText('Speaker limit', x + 4, Y(13));
+    }
+    if (am) {
+      g.globalAlpha = 0.35; am.each.forEach(d => line(d, C.brown, 1)); g.globalAlpha = 1;
+      line(am.avg, C.brown, 2.2);
+      line(eq.map(e => e + pre), C.mag, 2);
+      line(am.avg.map((d, i) => d + eq[i]), C.ink, 2.4);
+    } else {
+      g.fillStyle = C.mut; g.textAlign = 'center'; g.font = '15px Inter, system-ui, sans-serif';
+      g.fillText('No measurement yet (' + CH_NAME[S.view] + ')', (pl + W) / 2, Y(10));
+    }
+    renderResult();
+  }
+  const ro = new ResizeObserver(draw); ro.observe($('#cv'));
+  $('#cv').addEventListener('pointermove', e => readout(e)); $('#cv').addEventListener('pointerdown', e => readout(e));
+  function readout(e) {
+    if (!cache) return;
+    const r = $('#cv').getBoundingClientRect(), pl = 34, pr = 8;
+    const f = 20 * Math.pow(1000, Math.max(0, Math.min(1, (e.clientX - r.left - pl) / (r.width - pl - pr))));
+    let i = 0; while (i < grid.length - 1 && grid[i] < f) i++;
+    let t = fmtHz(grid[i]) + ' · EQ ' + fmtDb(cache.eq[i]);
+    if (cache.am) t += ' · Measured ' + fmtDb(cache.am.avg[i]) + ' · Result ' + fmtDb(cache.am.avg[i] + cache.eq[i]);
+    $('#readout').textContent = t;
+  }
+  // the correction in one line, and what the bass measurement says
+  let LIM = 0;
+  function renderResult() {
+    const ks = chans().filter(k => S.ch[k].meas.length);
+    if (!ks.length) {
+      // measurements live in the browser that made them; arply may have filters from another one
+      const nf = chans().reduce((s, k) => s + S.ch[k].filters.length, 0);
+      $('#result').textContent = nf ? 'arply uses ' + plural(nf, 'filter') + ' from an earlier measurement. Measure to recalculate.' : 'No correction yet – it is calculated after every measurement.';
+      $('#limitmsg').innerHTML = ''; return;
+    }
+    const tg = grid.map(targetOf), r = ks.map(k => {
+      const am = avgMeas(k), eq = DSP.eqCurve(S.ch[k].filters, grid, FS), fl = floorOf(k);
+      return { k, b: dev(am.avg, tg, fl), a: dev(am.avg.map((d, i) => d + eq[i]), tg, fl), n: S.ch[k].filters.filter(f => f.on).length };
+    });
+    const mean = key => (r.reduce((s, x) => s + x[key], 0) / r.length).toFixed(1);
+    $('#result').innerHTML = 'Off target <b>±' + mean('b') + ' dB</b> → <b>±' + mean('a') + ' dB</b> · ' +
+      (r.length > 1 ? r.map(x => CH_NAME[x.k] + ' ' + x.n).join(', ') + ' filters' : plural(r[0].n, 'filter')) + ' · preamp ' + fmtDb(preampAll());
+    if (isSub()) { $('#limitmsg').innerHTML = ''; return; }
+    const lims = ks.map(speakerLimit), lim = Math.max(0, ...lims.map(l => l.f)), ds = Math.max(0, ...lims.map(l => l.ds || 0)), b = S.opt.bass;
+    LIM = lim ? Math.max(40, Math.min(200, Math.round(lim / 5) * 5)) : 0;
+    $('#limitmsg').innerHTML = !lim ? 'The speaker reaches below what a phone microphone can measure (about 85 Hz).'
+      : 'The speaker reaches down to about <b>' + fmtHz(lim) + '</b>' + (ds ? ' (distortion above 10 % below ' + fmtHz(ds) + ')' : '') + '. ' +
+        (ROOM_HP ? '' : b.on ? (Math.abs(b.f - LIM) >= 10 ? 'Bass enhancement is set to ' + fmtHz(b.f) + '. <button id="b-lim">Use ' + fmtHz(LIM) + '</button>' : 'Bass enhancement takes over below.')
+          : 'Below, bass enhancement can help. <button id="b-lim">Turn on bass enhancement</button>');
+  }
+  $('#limitmsg').addEventListener('click', e => {
+    if (!e.target.closest('#b-lim') || !LIM) return;
+    S.opt.bass.f = LIM; S.opt.bass.on = true; pbeChanged();
+  });
+
+  // ---------- channel tabs / mode ----------
+  function renderTabs() {
+    const ks = chans();
+    $('#tabs').innerHTML = ks.length > 1
+      ? ks.map(k => `<button data-ch="${k}" aria-pressed="${k === S.view}">${CH_NAME[k]}</button>`).join('')
+      : `<span class="one">Channel: ${CH_NAME[ks[0]]}</span>`;
+    $('#modehint').textContent = MODE_HINT[S.opt.mode];
+  }
+  $('#tabs').addEventListener('click', e => {
+    const b = e.target.closest('button[data-ch]'); if (!b) return;
+    S.view = b.dataset.ch; save(); renderAll();
+  });
+  $('#o-mode').value = S.opt.mode;
+  $('#o-mode').onchange = e => { S.opt.mode = e.target.value; fixView(); save(); renderAll(); preview(); if (lvl) { stopLevel(); } };
+  function renderAll() { renderSample(); renderPbe(); renderSub(); renderScope(); renderTabs(); renderMeas(); renderFilters(); renderAb(); draw(); }
+  // ---------- scope: room + speaker, or room only ----------
+  function renderScope() {
+    $('#scopebox').hidden = isSub();
+    $('#scope').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === S.opt.scope)));
+    $('#scopehint').textContent = speakerScope()
+      ? 'Room modes in the bass, and the speaker’s own balance from ' + fmtHz(S.opt.fmin) + ' to ' + fmtHz(S.opt.fmax) + ' – broad and gentle, at most +' + S.opt.maxBoost + ' dB.'
+      : 'Only the room modes in the bass, up to ' + fmtHz(rangeHi()) + ' – cuts only.';
+  }
+  $('#scope').addEventListener('click', e => {
+    const b = e.target.closest('button[data-v]'); if (!b) return;
+    S.opt.scope = b.dataset.v; save(); renderScope(); draw(); refit();
+  });
+
+  // ---------- arply API ----------
+  async function api(path, body) {
+    const r = await fetch(path, body === undefined ? { cache: 'no-store' }
+      : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    let j = null; try { j = await r.json(); } catch (e) {}
+    if (!r.ok) { const err = new Error((j && j.error) || 'HTTP ' + r.status); err.status = r.status; throw err; }
+    return j;
+  }
+  // outputs a sweep plays on, per measured filter set
+  const SWEEP_OUT = { L: 'L', R: 'R', M: 'LR' };
+  const sweepOuts = ks => S.opt.mode === 'stereo' ? ks.map(k => SWEEP_OUT[k]) : ['LR'];
+  const busyMsg = e => e.status === 409 ? 'arply is busy – stop AirPlay playback first.' : 'arply did not answer (' + e.message + ').';
+  async function deviceSweeps(ks) {
+    return api('/api/dsp/sweep', { channels: Array(REPEAT).fill(sweepOuts(ks)).flat(), gap_ms: GAP * 1000 });
+  }
+  let devOk = false, previewing = false, pvTimer = null, pvLast = 0, saveT = null;
+  // throttled live preview on the speakers: at most every 150 ms, always
+  // ending on the latest state; saved 1.5 s after the last change (a
+  // forgotten save lost the filters when the page was left)
+  function preview() {
+    if (!devOk) return;
+    clearTimeout(pvTimer);
+    const run = () => { pvLast = performance.now(); api('/api/dsp/preview', payload()).then(() => { previewing = true; showSaved(); }).catch(() => {}); };
+    const wait = 150 - (performance.now() - pvLast);
+    if (wait <= 0) run(); else pvTimer = setTimeout(run, wait);
+    clearTimeout(saveT); saveT = setTimeout(saveNow, 1500);
+  }
+  const savePayload = () => ({ ...payload(), saved_at: Math.floor(Date.now() / 1000) });
+  async function saveNow() {
+    clearTimeout(saveT); saveT = null;
+    try { await api('/api/dsp', savePayload()); previewing = false; showSaved(); }
+    catch (e) { $('#sendmsg').textContent = 'Saving on arply failed: ' + e.message; }
+  }
+  function showSaved() {
+    $('#sendmsg').textContent = previewing ? 'Saving on arply in a moment …' : '✓ Saved on arply';
+  }
+
+
+  // ---------- microphone ----------
+  // A fresh AudioContext after getUserMedia, with the analysis chain ending
+  // in a muted gain at the destination: Safari only pulls audio through
+  // nodes that reach the output, otherwise the microphone reads as silence.
+  // resume() is not awaited: without a tap (page load) iOS keeps it pending
+  // until the first touch, see the pointerdown listener below.
+  async function micChain(stream) {
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    ac.resume().catch(() => {});
+    const src = ac.createMediaStreamSource(stream), mute = ac.createGain();
+    mute.gain.value = 0; mute.connect(ac.destination);
+    return { ac, src, mute };
+  }
+  // One microphone for the page, asked for when the page opens and kept
+  // open, so the meter at the right of the chart always shows whether it
+  // works. iOS ends the track in the background; the next action opens it
+  // again.
+  const MIC_LO = -90, MIC_HI = -10, micPos = db => Math.max(0, Math.min(100, (db - MIC_LO) / (MIC_HI - MIC_LO) * 100)) + '%';
+  let mic = null, micP = null;
+  function ensureMic() {
+    if (mic && mic.stream.getAudioTracks().some(t => t.readyState === 'live')) return mic.ac.resume().then(() => mic);
+    if (!micP) micP = openMic().finally(() => { micP = null; }); // one prompt, also when load and a tap overlap
+    return micP;
+  }
+  document.addEventListener('pointerdown', () => { if (mic && mic.ac.state !== 'running') mic.ac.resume().catch(() => {}); });
+  async function openMic() {
+    if (mic) mic.ac.close().catch(() => {});
+    const stream = await getMic(), { ac, src, mute } = await micChain(stream), an = ac.createAnalyser();
+    an.fftSize = 2048; src.connect(an); an.connect(mute);
+    const m = mic = { stream, ac, src, mute, db: -120, peak: -120, floor: null }, buf = new Float32Array(an.fftSize);
+    const tick = () => {
+      if (mic !== m) return;
+      an.getFloatTimeDomainData(buf);
+      let s = 0, pk = 0; for (const v of buf) { s += v * v; pk = Math.max(pk, Math.abs(v)); }
+      const db = 10 * Math.log10(s / buf.length + 1e-12);
+      m.db = m.db < -100 ? db : 0.85 * m.db + 0.15 * db;
+      m.peak = Math.max(20 * Math.log10(pk + 1e-9), m.peak - 0.5);
+      $('#micfill').style.height = micPos(m.db); $('#mic').classList.toggle('clip', m.peak > -3);
+      requestAnimationFrame(tick);
+    };
+    $('#mic').hidden = false; $('#micfloor').hidden = true; tick();
+    return m;
+  }
+
+  // ---------- level ----------
+  // 15 dB above the background: three averaged sweeps measure to < 0.3 dB
+  // there (simulated), and the distortion check has room to see a driver
+  // that distorts (10 dB was often too quiet to tell in a quiet room).
+  const LEVEL_MARGIN = 15, VOL_MIN = -30;
+  let lvl = null;
+  async function stopLevel() { if (lvl) { lvl.stop = true; await lvl.done; } }
+  // background noise, then arply's volume up from the lowest step until the
+  // test noise is LEVEL_MARGIN above it; true if measuring can go on. btn
+  // reads "Stop" meanwhile.
+  let levelDone = false;
+  async function setLevel(btn) {
+    if (!micOk()) { msg('No microphone on this page – it needs https (the link at the top).', true); return false; }
+    stopPlay();
+    let end, ok = false; const run = lvl = { stop: false, done: new Promise(r => (end = r)) }, label = btn.textContent;
+    btn.textContent = 'Stop';
+    let noise = false, db = VOL_MIN;
+    try {
+      const m = await ensureMic();
+      msg('Measuring the background noise – please stay quiet …');
+      await sleep(500);
+      const acc = []; for (let i = 0; i < 10; i++) { await sleep(100); acc.push(m.db); }
+      if (m.db < -100) throw new Error('The microphone delivers silence – reload the page and allow the microphone.');
+      m.floor = acc.reduce((a, b) => a + b, 0) / acc.length;
+      $('#micfloor').style.bottom = micPos(m.floor); $('#micfloor').hidden = false;
+      setVol(db, false);
+      await api('/api/dsp/noise', { on: true, channels: ['LR'] }); noise = true;
+      // 0.5 dB every 250 ms (2 dB/s, −30 → 0 dB in 15 s): steps too small to
+      // hear; the meter lags ~0.3 s, so it overshoots by well under 1 dB
+      while (!run.stop) {
+        await sleep(250);
+        const snr = m.db - m.floor;
+        if (snr >= LEVEL_MARGIN || m.peak > -6 || db >= 0) break;
+        msg('Raising the volume … ' + Math.max(0, snr).toFixed(0) + ' of ' + LEVEL_MARGIN + ' dB above the background noise');
+        db = Math.min(0, db + 0.5); setVol(db, false);
+      }
+      const snr = m.db - m.floor;
+      if (!run.stop) setVol(db, true);
+      ok = !run.stop;
+      msg(run.stop ? 'Stopped.' :
+        snr >= LEVEL_MARGIN || m.peak > -6 ? 'Level set: volume ' + volPct(db) + ', ' + snr.toFixed(0) + ' dB above the background noise.' :
+        'Even at full volume only ' + snr.toFixed(0) + ' dB above the background noise – move the phone closer or make the room quieter. Measuring still works, less precisely.', !run.stop && snr < LEVEL_MARGIN && m.peak <= -6);
+    } catch (e) {
+      msg(e.status ? busyMsg(e) : e.message || 'Microphone denied or blocked here (' + e.name + ').', true);
+    } finally {
+      if (noise) await api('/api/dsp/noise', { on: false }).catch(() => {});
+      lvl = null; btn.textContent = label; end();
+    }
+    return ok;
+  }
+  $('#b-level').onclick = async () => {
+    if (lvl) { stopLevel(); return; }
+    if (!busy) levelDone = await setLevel($('#b-level'));
+  };
+
+  // ---------- measurements ----------
+  // whole recording -> one impulse response -> one peak per channel
+  function analyzeRec(rec, fs, ks, live) {
+    let pk = 0; for (let i = 0; i < rec.length; i++) pk = Math.max(pk, Math.abs(rec[i]));
+    const lv = 20 * Math.log10(pk + 1e-12);
+    if (lv < -75) { levelDone = false; msg('The recording is almost silent (' + lv.toFixed(0) + ' dBFS). Measure again – arply sets its level first.', true); return; }
+    const sw = DSP.sweep(fs), h = DSP.impulse(rec, sw, fs), step = Math.round((sw.T + GAP) * fs), win = Math.round(0.05 * fs);
+    let p0;
+    if (live) p0 = DSP.argmaxAbs(h, 0, Math.round(LEAD * fs) + step);
+    else {
+      p0 = DSP.argmaxAbs(h, 0, h.length);
+      for (let n = 0; n < ks.length * REPEAT; n++) { // walk back to the first sweep in the file
+        const q = DSP.argmaxAbs(h, p0 - step - win, p0 - step + win);
+        if (q >= 0 && Math.abs(h[q]) > 0.15 * Math.abs(h[p0])) p0 = q; else break;
+      }
+    }
+    const ref = Math.abs(h[p0]), out = [], run = Date.now();
+    const peaks = Array.from({ length: ks.length * REPEAT }, (_, i) => i ? DSP.argmaxAbs(h, p0 + i * step - win, p0 + i * step + win) : p0);
+    // a channel's sweeps, aligned on their own peaks (clock drift) and averaged
+    const average = (ps, pre, len) => {
+      const a = new Float64Array(pre + len);
+      for (const q of ps) for (let j = 0; j < a.length; j++) a[j] += (h[q - pre + j] || 0) / ps.length;
+      return a;
+    };
+    const pre = Math.round(0.01 * fs), dpre = Math.round(DSP.DIST_PRE * fs);
+    ks.forEach((k, i) => {
+      const ps = peaks.filter((_, j) => j % ks.length === i), p = ps[0];
+      if (ps.some(q => q < 0 || Math.abs(h[q]) < 0.05 * ref)) { out.push({ warn: true, t: CH_NAME[k] + ': no signal – is the speaker connected?' }); return; }
+      const sp = DSP.spectrumAt(average(ps, pre, Math.round(0.4 * fs)), pre, fs, 0.4);
+      // a subwoofer is levelled on its own band, not on 200 Hz–2 kHz
+      const db = DSP.normalize(DSP.toGrid(sp.P, sp.M, fs, grid, 24), grid, ...(isSub() ? [30, S.opt.sub.xo] : [])).map(v => Math.round(v * 100) / 100);
+      // distortion only from sweeps with their harmonics inside the recording
+      const pd = ps.filter(q => q >= dpre), thd = pd.length ? DSP.distortion(average(pd, dpre, Math.round(0.2 * fs)), dpre, sw, fs, grid) : null;
+      const fd = thd && DSP.distLimit(thd, grid), rel = 20 * Math.log10(Math.abs(h[p]) / ref);
+      S.ch[k].meas.push({ run, db, thd });
+      out.push({ warn: false, t: CH_NAME[k] + (i ? ' (' + fmtDb(rel) + ' vs ' + CH_NAME[ks[0]] + ')' : '') + ': ok' + (fd ? ', distortion > 10 % below ' + fmtHz(fd) : '') });
+    });
+    // Stereo: arrival time and polarity of right vs left. A sweep of both
+    // together would add nothing: the room is linear, L+R is the sum of these.
+    if (ks.length === 2 && out.every(o => !o.warn)) {
+      const L = peaks.filter((_, j) => j % 2 === 0), R = peaks.filter((_, j) => j % 2 === 1);
+      const st = (L[L.length - 1] - L[0]) / (2 * (L.length - 1)); // real sweep spacing on the phone's clock
+      const ms = (R.reduce((a, r, j) => a + r - L[j], 0) / R.length - st) / fs * 1000;
+      if (Math.abs(ms) >= 0.3) out.push({ warn: false, t: 'Right arrives ' + Math.abs(ms).toFixed(1) + ' ms (' + Math.round(Math.abs(ms) * 34.3) + ' cm) ' + (ms > 0 ? 'later' : 'earlier') });
+      // polarity: sign of the direct sound, trusted only if it clearly beats the opposite lobe within ±1 ms
+      const w1 = Math.round(0.001 * fs), sign = q => {
+        let pos = 0, neg = 0; for (let j = q - w1; j <= q + w1; j++) { pos = Math.max(pos, h[j]); neg = Math.max(neg, -h[j]); }
+        return pos > 1.5 * neg ? 1 : neg > 1.5 * pos ? -1 : 0;
+      };
+      const sl = L.map(sign), sr = R.map(sign);
+      if (sl.every(v => v && v === sl[0]) && sr.every(v => v === -sl[0])) out.push({ warn: true, t: 'Right has the opposite polarity of Left – swap + and − on one speaker, or the bass cancels' });
+    }
+    save(); renderMeas(); draw();
+    const fit = fitAll(), warn = lv > -1 || out.some(o => o.warn), n = runs().length, extra = out.filter(o => !/: ok$/.test(o.t)).map(o => o.t);
+    if (warn) msg('Level ' + lv.toFixed(0) + ' dBFS, delay ' + Math.round(p0 / fs * 1000 - (live ? LEAD * 1000 : 0)) + ' ms' +
+      (lv > -1 ? ' – clipping, measure quieter!' : '') + ' · ' + out.map(o => o.t).join(' · ') + (fit ? ' · filters: ' + fit : ''), true);
+    else msg('Position ' + n + ' measured' + (extra.length ? ' · ' + extra.join(' · ') : '') + '. ' +
+      (n < 3 ? 'Move the phone a little and measure again – 3 to 5 positions around your seat.' : 'Good. More positions make it steadier.'));
+  }
+  // one chip per measuring run (left and right together)
+  const runs = () => [...new Set(chans().flatMap(k => S.ch[k].meas.map(m => m.run)))];
+  function renderMeas() {
+    $('#b-clear').hidden = !runs().length;
+    $('#meas').innerHTML = runs().map((r, i) => `<span class="chip">Position ${i + 1}<button aria-label="Delete position ${i + 1}" data-run="${r}">×</button></span>`).join('');
+  }
+  $('#meas').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    for (const k of ['L', 'R', 'M']) S.ch[k].meas = S.ch[k].meas.filter(m => String(m.run) !== b.dataset.run);
+    if (isSub()) realign();
+    save(); renderMeas(); draw();
+    const r = fitAll(); msg(r ? 'Position removed, filters recalculated: ' + r : 'Position removed.');
+  });
+  async function progress(sec) {
+    const p = $('#prog'); p.hidden = false; const t0 = performance.now();
+    while (performance.now() - t0 < sec * 1000) { p.value = (performance.now() - t0) / (sec * 1000); await sleep(100); }
+    p.hidden = true;
+  }
+  $('#b-live').onclick = async () => {
+    if (lvl) { stopLevel(); return; }
+    if (isSub()) return measureSub();
+    if (busy) return;
+    if (!micOk()) { msg('No microphone on this page – it needs https (the link at the top).', true); return; }
+    if (!levelDone && !(levelDone = await setLevel($('#b-live')))) return;
+    busy = true; await stopLevel(); stopPlay();
+    let m;
+    try { m = await ensureMic(); } catch (e) { busy = false; msg('Microphone denied or blocked here (' + e.name + ').', true); return; }
+    const fs = m.ac.sampleRate, proc = m.ac.createScriptProcessor(4096, 1, 1), chunks = [];
+    let on = true;
+    proc.onaudioprocess = e => { if (on) chunks.push(new Float32Array(e.inputBuffer.getChannelData(0))); };
+    m.src.connect(proc); proc.connect(m.mute);
+    const ks = chans(), finish = () => { on = false; m.src.disconnect(proc); proc.disconnect(); };
+    // recording runs first; arply starts the sweeps lead_ms after the request
+    let t;
+    try { t = await deviceSweeps(ks); } catch (e) { finish(); busy = false; msg(busyMsg(e), true); return; }
+    msg('Measuring ' + REPEAT + '× (' + ks.map(k => CH_NAME[k]).join(', ') + ') – please stay quiet …');
+    await progress((t.lead_ms + t.count * (t.sweep_ms + t.gap_ms)) / 1000 + 0.5);
+    finish();
+    const n = chunks.reduce((s, a) => s + a.length, 0), rec = new Float32Array(n); let o = 0;
+    for (const a of chunks) { rec.set(a, o); o += a.length; }
+    // network delay is unknown, so the analysis finds the first sweep in the recording itself
+    analyzeRec(rec, fs, ks, false); busy = false;
+  };
+
+  // ---------- options ----------
+  const opts = [['fmin', v => fmtHz(v)], ['fmax', v => fmtHz(v)], ['tilt', v => '+' + String(v) + ' dB'], ['treble', v => '−' + v + ' dB/oct'],
+    ['maxn', v => v], ['cut', v => '−' + v + ' dB'], ['boost', v => '+' + v + ' dB']];
+  const key = { fmin: 'fmin', fmax: 'fmax', tilt: 'tilt', treble: 'treble', maxn: 'maxN', cut: 'maxCut', boost: 'maxBoost' };
+  for (const [id, fmt] of opts) {
+    const el = $('#o-' + id), out = $('#v-' + id);
+    el.value = S.opt[key[id]]; out.textContent = fmt(+el.value);
+    el.oninput = () => { S.opt[key[id]] = +el.value; out.textContent = fmt(+el.value); renderScope(); save(); draw(); refit(); };
+  }
+  $('#o-detail').value = String(S.opt.detail); $('#o-detail').onchange = e => { S.opt.detail = +e.target.value; save(); draw(); refit(); };
+  // recalculate the filters of every measured channel; returns a summary or null
+  function fitAll() {
+    const ks = chans().filter(k => S.ch[k].meas.length);
+    if (!ks.length) return null;
+    undo = JSON.stringify(chans().map(k => [k, S.ch[k].filters])); $('#b-undo').disabled = false;
+    const res = ks.map(k => {
+      S.ch[k].filters = DSP.autoFit(avgMeas(k).avg, grid, { fs: FS, fmin: rangeLo(), fmax: rangeHi(), roomHi: isSub() ? rangeHi() : 500,
+        speaker: speakerScope(), floor: floorOf(k), tilt: S.opt.tilt, treble: isSub() ? 0 : S.opt.treble, maxN: S.opt.maxN, maxCut: S.opt.maxCut, maxBoost: S.opt.maxBoost });
+      const n = S.ch[k].filters.length; return CH_NAME[k] + ' ' + n;
+    });
+    const miss = chans().filter(k => !S.ch[k].meas.length).map(k => CH_NAME[k]);
+    changed(true);
+    return res.join(', ') + (miss.length ? ' (not measured: ' + miss.join(', ') + ')' : '');
+  }
+  let fitT = null;
+  function refit() {
+    clearTimeout(fitT);
+    fitT = setTimeout(() => { const r = fitAll(); if (r) msg('Filters recalculated: ' + r); }, 400);
+  }
+  $('#b-fit').onclick = () => { const r = fitAll(); msg(r ? 'Filters recalculated: ' + r : 'Measure first.', !r); };
+  $('#b-undo').onclick = () => {
+    if (!undo) return;
+    for (const [k, f] of JSON.parse(undo)) S.ch[k].filters = f;
+    undo = null; $('#b-undo').disabled = true; changed(true);
+  };
+
+  // ---------- bass enhancement ----------
+  const pbeActive = () => S.opt.bass.on && S.opt.mode !== 'bass';
+  // the bass block at full boost: low shelf at the limit, subsonic high-pass at half of it
+  function bassCurve() {
+    const b = S.opt.bass, sh = DSP.coeffs('ls', b.f, b.boost / 100 * 12, 0, FS), hp = DSP.coeffs('hp', b.f / 3, 0, Math.SQRT1_2, FS);
+    return grid.map(f => DSP.magDb(sh, f, FS) + 2 * DSP.magDb(hp, f, FS)); // LR4 subsonic
+  }
+  // ---- subwoofer alignment: one recording, the room's speakers then this subwoofer ----
+  // s between the devices' first sweeps: 2 s wake-up noise + 0.3 s rest
+  // (amplifiers with a signal-sensing standby) + 4 s sweep + gap, so no
+  // device's wake-up noise falls into another one's sweep
+  const ALIGN_STEP = 7, ALIGN_START = 3.5;
+  const SUB_STEP = 4.5;  // s between the subwoofer's own sweeps (one request, gap 0.5 s)
+  const volLin = db => Math.pow(Math.max(0, (db + 30) / 30), 2); // arply's volume curve
+  const MEAS_HINT = $('#meashint').textContent;
+  const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+  // One run: every online speaker of this room plays a sweep, then this
+  // subwoofer; the recording gives the alignment data and the subwoofer's
+  // response for the room-mode cuts.
+  async function measureSub() {
+    if (busy) return;
+    if (!micOk()) { msg('No microphone on this page – it needs https (the link at the top).', true); return; }
+    busy = true; await stopLevel(); stopPlay();
+    let proc = null, m = null;
+    try {
+      const f = await api('/api/fleet'), room = (f.self.room || '').toLowerCase();
+      const mains = f.peers.filter(p => p.online && p.role === 'main' && room && (p.room || '').toLowerCase() === room);
+      if (!mains.length) { msg('No speaker of this room (“' + f.self.room + '”) is online – give them the same room on their settings page.', true); return; }
+      m = await ensureMic();
+      const fs = m.ac.sampleRate, chunks = [], id = p => encodeURIComponent(p.id);
+      msg('Comparing clocks …');
+      const off = [], vols = [];
+      for (const p of mains) off.push((await api('/api/fleet/clock?id=' + id(p))).offset_us);
+      for (const p of mains) vols.push((await api('/api/fleet/proxy?id=' + id(p) + '&to=volume')).db);
+      const vSub = (await api('/api/audio/volume')).db;
+      const now = (await api('/api/fleet/clock?id=' + id(mains[0]))).now_us;
+      proc = m.ac.createScriptProcessor(4096, 1, 1);
+      proc.onaudioprocess = e => chunks.push(new Float32Array(e.inputBuffer.getChannelData(0)));
+      m.src.connect(proc); proc.connect(m.mute);
+      // this subwoofer's clock: first sweep in ALIGN_START s, then one device every ALIGN_STEP
+      const t0 = now + ALIGN_START * 1000000, sweepAt = k => t0 + k * ALIGN_STEP * 1000000;
+      for (let k = 0; k < mains.length; k++)
+        await api('/api/fleet/proxy?id=' + id(mains[k]) + '&to=sweep', { channels: ['LR'], gap_ms: 500, at_us: sweepAt(k) + off[k] });
+      // the subwoofer REPEAT times back to back (4 s sweep + 0.5 s gap), averaged:
+      // in the bass the room's noise and the phone microphone are weakest
+      await api('/api/dsp/sweep', { channels: Array(REPEAT).fill('LR'), gap_ms: 500, at_us: sweepAt(mains.length) });
+      msg('Measuring: ' + mains.map(p => p.name).join(', ') + ', then this subwoofer ' + REPEAT + '× – please stay quiet …');
+      await progress(ALIGN_START + mains.length * ALIGN_STEP + REPEAT * SUB_STEP + 0.5);
+      m.src.disconnect(proc); proc.disconnect(); proc = null;
+      const n = chunks.reduce((a, c) => a + c.length, 0), rec = new Float32Array(n); let o = 0;
+      for (const c of chunks) { rec.set(c, o); o += c.length; }
+      const sw = DSP.sweep(fs), h = DSP.impulse(rec, sw, fs), step = Math.round(ALIGN_STEP * fs);
+      // anchor: the first speaker's direct sound; every other slot follows the plan
+      const p0 = DSP.argmaxAbs(h, 0, Math.min(h.length, Math.round((ALIGN_START + ALIGN_STEP / 2) * fs)));
+      const pre = Math.round(0.02 * fs), len = Math.round(0.3 * fs), cut = (k, scale) => {
+        const a = new Float64Array(len); for (let i = 0; i < len; i++) a[i] = (h[p0 + k * step - pre + i] || 0) * scale; return a; };
+      const hMain = new Float64Array(len);
+      mains.forEach((p, k) => { const c = cut(k, 1 / volLin(vols[k])); for (let i = 0; i < len; i++) hMain[i] += c[i]; });
+      // the subwoofer's sweeps, averaged on their planned places
+      const ps = p0 + mains.length * step, sstep = Math.round(SUB_STEP * fs), avgSub = (pre2, len2, scale) => {
+        const a = new Float64Array(len2);
+        for (let r = 0; r < REPEAT; r++) for (let i = 0; i < len2; i++) a[i] += (h[ps + r * sstep - pre2 + i] || 0) * scale / REPEAT;
+        return a;
+      };
+      if (!(Math.abs(h[p0]) > 0)) throw new Error('no sweep in the recording – is the microphone allowed?');
+      // the subwoofer's sweeps come from one request, sample-exact apart: if
+      // their energy sits at different places, the recording lost samples
+      const centre = r => { let e = 0, t = 0; for (let i = 0; i < len; i++) { const v = (h[ps + r * sstep - pre + i] || 0) ** 2; e += v; t += v * i; } return t / e / fs * 1000; };
+      const cs = Array.from({ length: REPEAT }, (_, r) => centre(r)), spread = Math.max(...cs) - Math.min(...cs);
+      if (spread > 0.5) throw new Error('the recording has a gap (' + spread.toFixed(1) + ' ms) – please measure again.');
+      // subwoofer response for the room-mode cuts, levelled on its own band
+      const sp = DSP.spectrumAt(avgSub(pre, pre + Math.round(0.45 * fs), 1), pre, fs, 0.4);
+      const db = DSP.normalize(DSP.toGrid(sp.P, sp.M, fs, grid, 24), grid, 30, S.opt.sub.xo).map(v => Math.round(v * 100) / 100);
+      S.ch.M.meas.push({ run: Date.now(), db, al: DSP.alignSpectra(hMain, avgSub(pre, len, 1 / volLin(vSub)), fs) });
+      save(); renderMeas();
+      const r = realign(), fit = fitAll();
+      msg('Measured with ' + mains.map(p => p.name).join(', ') + '. ' + (fit ? 'Room-mode cuts: ' + S.ch.M.filters.length + '. ' : '') +
+        (S.ch.M.meas.length < 3 ? 'Measure 2–4 more positions around the listening spot.' : 'Saved – listen with music.'));
+      return r;
+    } catch (e) { msg('That did not work: ' + (e.status === 409 ? 'a device is busy – stop AirPlay first.' : e.message), true); }
+    finally { if (proc && m) { m.src.disconnect(proc); proc.disconnect(); } busy = false; }
+  }
+  // level, delay and polarity from every stored measurement (they sum over positions)
+  function realign() {
+    const runs = S.ch.M.meas.filter(x => x.al).map(x => x.al);
+    if (!runs.length) return null;
+    const r = DSP.alignRuns(runs, S.opt.sub.xo), clampTo = (v, a, b) => Math.max(a, Math.min(b, v));
+    S.opt.sub.gain = clampTo(Math.round(r.gainDb * 2) / 2, -12, 12);
+    S.opt.sub.delay = clampTo(Math.round(r.delayMs * 10) / 10, 0, 20);
+    S.opt.sub.inv = r.invert;
+    renderSub();
+    $('#alignmsg').textContent = 'From ' + plural(runs.length, 'measurement') + ': level ' + fmtDb(S.opt.sub.gain) +
+      (Math.abs(r.gainDb) > 12 ? ' (wanted ' + fmtDb(r.gainDb) + ')' : '') + ', delay ' + S.opt.sub.delay.toFixed(1) + ' ms (' +
+      Math.round(S.opt.sub.delay * 34.3) + ' cm), polarity ' + (r.invert ? 'inverted' : 'normal') + '; around the crossover the sum is ' +
+      (-r.sumDb).toFixed(1) + ' dB short of perfect.' +
+      (r.needMs ? ' The subwoofer stands farther away than the speakers: it would have to play ' + r.needMs + ' ms earlier – move it closer if you can.' : '');
+    return r;
+  }
+  function renderSub() {
+    const b = S.opt.sub;
+    $('#subpanel').hidden = !isSub(); $('#basspanel').hidden = isSub(); $('#o-mode').disabled = isSub();
+    // a subwoofer: range and target follow the crossover, cuts only, no editor
+    $('#adv').hidden = isSub(); $('#filt-actions').hidden = isSub();
+    $('#meashint').textContent = isSub()
+      ? 'Each measurement plays a sweep on every speaker of this room, then three on this subwoofer (averaged), and sets level, delay, polarity and the room-mode cuts (20 Hz to twice the crossover). The first at your seat, 2–4 more around it.'
+      : MEAS_HINT;
+    $('#o-xo').value = b.xo; $('#v-xo').textContent = fmtHz(b.xo);
+    $('#o-xogain').value = b.gain; $('#v-xogain').textContent = fmtDb(b.gain);
+    $('#o-xodelay').value = b.delay; $('#v-xodelay').textContent = b.delay.toFixed(1) + ' ms · ' + Math.round(b.delay * 34.3) + ' cm';
+    $('#o-xoinv').checked = b.inv;
+  }
+  const subChanged = () => { renderSub(); save(); draw(); preview(); };
+  $('#o-xo').oninput = e => { S.opt.sub.xo = +e.target.value; realign(); refit(); subChanged(); };
+  $('#o-xogain').oninput = e => { S.opt.sub.gain = +e.target.value; subChanged(); };
+  $('#o-xodelay').oninput = e => { S.opt.sub.delay = +e.target.value; subChanged(); };
+  $('#o-xoinv').onchange = e => { S.opt.sub.inv = e.target.checked; subChanged(); };
+  function renderPbe() {
+    const b = S.opt.bass;
+    $('#o-pbe').checked = b.on;
+    $('#o-pbefc').value = b.f; $('#v-pbefc').textContent = fmtHz(b.f);
+    $('#o-pbeboost').value = b.boost; $('#v-pbeboost').textContent = '+' + (b.boost / 100 * 12).toFixed(0) + ' dB';
+    $('#o-pbeamt').value = b.harm; $('#v-pbeamt').textContent = b.harm + ' %';
+    for (const id of ['#o-pbefc', '#o-pbeboost', '#o-pbeamt']) $(id).disabled = !b.on;
+  }
+  const pbeChanged = () => { renderPbe(); save(); draw(); preview(); };
+  $('#o-pbe').onchange = e => { S.opt.bass.on = e.target.checked; pbeChanged(); };
+  $('#o-pbefc').oninput = e => { S.opt.bass.f = +e.target.value; pbeChanged(); };
+  $('#o-pbeboost').oninput = e => { S.opt.bass.boost = +e.target.value; pbeChanged(); };
+  $('#o-pbeamt').oninput = e => { S.opt.bass.harm = +e.target.value; pbeChanged(); };
+  // a channel's distortion over its measurements (power mean where measured); null = no data
+  function avgThd(k) {
+    const ts = S.ch[k].meas.map(m => m.thd).filter(Boolean);
+    if (!ts.length) return null;
+    return grid.map((_, i) => {
+      const v = ts.map(t => t[i]).filter(x => x !== null);
+      return v.length ? 10 * Math.log10(v.reduce((a, x) => a + Math.pow(10, x / 10), 0) / v.length) : null;
+    });
+  }
+
+  // ---------- filter editor (current channel) ----------
+  const TYPES = { peak: 'Peak (bell)', ls: 'Low shelf', hs: 'High shelf', hp: 'High-pass', lp: 'Low-pass' };
+  const toSl = f => Math.round(Math.log(f / 20) / Math.log(1000) * 1000), fromSl = v => Math.round(20 * Math.pow(1000, v / 1000) * 10) / 10;
+  function renderFilters() {
+    const fl = cur().filters;
+    $('#filt-h').textContent = (isSub() ? 'Room-mode cuts' : 'Filters') + (chans().length > 1 ? ' – ' + CH_NAME[S.view] : '') + ' (' + fl.length + ')';
+    if (isSub()) { // the list only: the cuts follow the measurements and the crossover
+      $('#filters').innerHTML = fl.length ? '<p class="small">' + fl.map(f => fmtHz(f.f) + ' ' + fmtDb(f.gain)).join(' · ') + '</p>'
+        : '<p class="small">No cuts yet – they are calculated after a measurement.</p>';
+      return;
+    }
+    $('#filters').innerHTML = fl.length ? fl.map((f, i) => `
+      <div class="filt" data-i="${i}">
+        <div class="fhead"><input type="checkbox" data-k="on" ${f.on ? 'checked' : ''} aria-label="Filter ${i + 1} enabled" style="width:22px;height:22px;accent-color:var(--acc)">
+          <select data-k="type">${Object.entries(TYPES).map(([k, v]) => `<option value="${k}" ${k === f.type ? 'selected' : ''}>${v}</option>`).join('')}</select>
+          <button data-k="del" aria-label="Delete filter ${i + 1}">Delete</button></div>
+        <label class="f">Frequency<input type="range" data-k="f" min="0" max="1000" value="${toSl(f.f)}"><output>${fmtHz(f.f)}</output></label>
+        ${f.type === 'hp' || f.type === 'lp' ? '' : `<label class="f">Gain<input type="range" data-k="gain" min="-18" max="6" step="0.1" value="${f.gain}"><output>${fmtDb(f.gain)}</output></label>`}
+        ${f.type === 'ls' || f.type === 'hs' ? '' : `<label class="f">Q<input type="range" data-k="q" min="0.3" max="12" step="0.01" value="${f.q}"><output>${f.q.toFixed(2)}</output></label>`}
+      </div>`).join('') : '<p class="small">No filters yet – they are calculated after a measurement.</p>';
+  }
+  $('#filters').addEventListener('input', e => {
+    const box = e.target.closest('.filt'); if (!box) return;
+    const f = cur().filters[+box.dataset.i], k = e.target.dataset.k, out = e.target.nextElementSibling;
+    if (k === 'f') { f.f = fromSl(+e.target.value); out.textContent = fmtHz(f.f); }
+    else if (k === 'gain') { f.gain = +e.target.value; out.textContent = fmtDb(f.gain); }
+    else if (k === 'q') { f.q = +e.target.value; out.textContent = f.q.toFixed(2); }
+    else return;
+    changed(false);
+  });
+  $('#filters').addEventListener('change', e => {
+    const box = e.target.closest('.filt'); if (!box) return;
+    const f = cur().filters[+box.dataset.i], k = e.target.dataset.k;
+    if (k === 'on') { f.on = e.target.checked; changed(false); }
+    if (k === 'type') { f.type = e.target.value; if (f.type === 'hp') { f.q = 0.71; if (f.f > 200) f.f = 30; } if (f.type === 'lp') { f.q = 0.71; if (f.f < 2000) f.f = 16000; } changed(true); }
+  });
+  $('#filters').addEventListener('click', e => {
+    const b = e.target.closest('button[data-k=del]'); if (!b) return;
+    cur().filters.splice(+b.closest('.filt').dataset.i, 1); changed(true);
+  });
+  $('#b-add').onclick = () => { cur().filters.push({ type: 'peak', on: true, f: 100, gain: -3, q: 2 }); changed(true); };
+  $('#b-clear').onclick = () => {
+    if (!confirm('Remove all measurements and filters (left and right)?')) return;
+    for (const k of ['L', 'R', 'M']) S.ch[k] = newCh();
+    undo = null; $('#b-undo').disabled = true;
+    renderMeas(); changed(true); msg('All measurements and filters removed.');
+  };
+
+  let tmr = null;
+  function changed(rebuild) {
+    if (rebuild) renderFilters();
+    save(); draw(); preview();
+  }
+
+  // ---------- export ----------
+  function payload() {
+    const r6 = v => Math.round(v * 1e8) / 1e8, channels = {};
+    for (const k of chans()) channels[k] = S.ch[k].filters.filter(f => f.on).map(f => {
+      const c = DSP.coeffs(f.type, f.f, f.gain, f.q, FS);
+      return { type: f.type, f: f.f, gain_db: f.type === 'hp' || f.type === 'lp' ? 0 : f.gain, q: f.type === 'ls' || f.type === 'hs' ? 0.7071 : f.q,
+        b: [r6(c.b0), r6(c.b1), r6(c.b2)], a: [r6(c.a1), r6(c.a2)] };
+    });
+    return { version: 2, fs: FS, mode: S.opt.mode, preamp_db: preampAll(), channels,
+      bass: { on: pbeActive(), f_low: S.opt.bass.f, boost: S.opt.bass.boost / 100, harmonics: S.opt.bass.harm / 100 },
+      sub: { xo: S.opt.sub.xo, gain_db: S.opt.sub.gain, delay_ms: S.opt.sub.delay, invert: S.opt.sub.inv } };
+  }
+  // leaving the page saves what is still pending
+  addEventListener('pagehide', () => {
+    if (!saveT) return;
+    clearTimeout(saveT); saveT = null;
+    navigator.sendBeacon('/api/dsp', new Blob([JSON.stringify(savePayload())], { type: 'application/json' }));
+  });
+
+  // ---------- listen on arply ----------
+  let playing = false, playT0 = 0, bypass = false;
+  if (!SAMPLE_HINT[S.opt.sample]) S.opt.sample = 'groove';
+  // render a built-in sample at arply's rate as s16 PCM; mono where both channels are the same
+  function samplePcm(kind) {
+    const b = makeSample(new OfflineAudioContext(2, 1, FS), kind);
+    const l = b.getChannelData(0), r = b.getChannelData(1), stereo = kind === 'groove', n = l.length;
+    const q = v => Math.max(-32768, Math.min(32767, Math.round(v * 32767)));
+    const pcm = new Int16Array(stereo ? 2 * n : n);
+    for (let i = 0; i < n; i++) {
+      if (stereo) { pcm[2 * i] = q(l[i]); pcm[2 * i + 1] = q(r[i]); } else pcm[i] = q(l[i]);
+    }
+    return { pcm, channels: stereo ? 2 : 1 };
+  }
+  function stopPlay() {
+    if (playing) api('/api/dsp/stop', {}).catch(() => {});
+    playing = false; $('#b-play').textContent = 'Play on arply'; $('#musicname').textContent = '';
+  }
+  function renderSample() { $('#o-sample').value = S.opt.sample; $('#samplehint').textContent = SAMPLE_HINT[S.opt.sample]; }
+  $('#o-sample').onchange = e => { const was = playing; stopPlay(); S.opt.sample = e.target.value; save(); renderSample(); if (was) $('#b-play').click(); };
+  // show the current tone while the bass tones play
+  function toneTick() {
+    if (!playing || S.opt.sample !== 'tones') return;
+    const t = Math.max(0, (performance.now() - playT0) / 1000) % (0.9 * TONES_HZ.length);
+    $('#musicname').textContent = 'Tone: ' + TONES_HZ[Math.min(TONES_HZ.length - 1, Math.floor(t / 0.9))] + ' Hz';
+    setTimeout(toneTick, 100);
+  }
+  $('#b-play').onclick = async () => {
+    if (playing) { stopPlay(); return; }
+    if (!devOk) { $('#musicname').textContent = 'arply not reachable.'; return; }
+    await stopLevel();
+    const b = $('#b-play'); b.disabled = true; $('#musicname').textContent = 'Sending the sample to arply …';
+    try {
+      const { pcm, channels } = samplePcm(S.opt.sample);
+      const r = await fetch('/api/dsp/listen?channels=' + channels, { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: pcm.buffer });
+      if (!r.ok) { const e = new Error('HTTP ' + r.status); e.status = r.status; throw e; }
+      playing = true; playT0 = performance.now() + 100; b.textContent = 'Stop'; $('#musicname').textContent = ''; toneTick();
+    } catch (e) { $('#musicname').textContent = busyMsg(e); }
+    b.disabled = false;
+  };
+  function renderAb() { $('#ab').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String((b.dataset.v === '1') === bypass))); }
+  $('#ab').addEventListener('click', e => {
+    const b = e.target.closest('button[data-v]'); if (!b) return;
+    bypass = b.dataset.v === '1'; renderAb();
+    if (devOk) api('/api/dsp/bypass', { on: bypass }).catch(() => {});
+  });
+
+  // ---------- volume (arply's one volume, shared with AirPlay) ----------
+  let volT = null;
+  const volPct = db => Math.round((db - VOL_MIN) / -VOL_MIN * 100) + ' %';
+  function showVol(db) {
+    $('#o-vol2').value = db; $('#v-vol2').textContent = volPct(db);
+  }
+  function setVol(db, persist) {
+    showVol(db); clearTimeout(volT);
+    volT = setTimeout(() => api('/api/audio/volume', { db, persist }).catch(() => {}), persist ? 0 : 80);
+  }
+  $('#o-vol2').oninput = e => setVol(+e.target.value, false);
+  $('#o-vol2').onchange = e => setVol(+e.target.value, true);
+
+  // ---------- start ----------
+  // device filter {type,f,gain_db,q,enabled} -> page filter {type,on,f,gain,q}
+  function applyDevice(j) {
+    FS = j.fs || FS;
+    for (const k of ['L', 'R', 'M']) S.ch[k].filters = ((j.channels || {})[k] || []).map(f => ({ type: f.type, on: f.enabled !== false, f: f.f, gain: f.gain_db || 0, q: f.q }));
+    if (MODES[j.mode]) S.opt.mode = j.mode;
+    if (j.bass) S.opt.bass = { on: !!j.bass.on, f: j.bass.f_low, boost: Math.round(j.bass.boost * 100), harm: Math.round(j.bass.harmonics * 100) };
+    if (j.sub) S.opt.sub = { xo: j.sub.xo, gain: j.sub.gain_db, delay: j.sub.delay_ms, inv: !!j.sub.invert };
+    ROLE = j.role === 'bass' ? 'bass' : 'main'; ROOM_HP = j.room_hp || 0;
+    if (isSub()) S.opt.mode = 'mono'; // a subwoofer plays mono
+    $('#pbemsg').textContent = ROOM_HP ? 'A subwoofer in this room is playing below ' + fmtHz(ROOM_HP) + ': the bass block pauses while it plays.' : '';
+    fixView(); save(); $('#o-mode').value = S.opt.mode;
+  }
+  const host = location.hostname;
+  const httpsLink = location.protocol === 'https:' ? '' : ` For live measuring with the microphone open <a href="https://${host}/dsp">https://${host}/dsp</a>.`;
+  renderAll();
+  if (micOk()) ensureMic().catch(() => {}); // asks right away; denied -> asked again on "Set level"
+  api('/api/audio/volume').then(j => showVol(j.db)).catch(() => showVol(-15));
+  api('/api/dsp').then(j => {
+    devOk = true; applyDevice(j); previewing = !!j.previewing; renderAll();
+    bypass = !!j.bypass; renderAb();
+    if (UPGRADED) { const r = fitAll(); if (r) msg('Recalculated with the new correction (room + speaker): ' + r); }
+    $('#status').innerHTML = '<b>Connected to arply</b> at ' + host + ' (' + (FS / 1000) + ' kHz).' + (previewing ? ' An unsaved preview is playing.' : '') + httpsLink;
+    if (previewing) showSaved();
+  }).catch(() => {
+    $('#status').innerHTML = '<b>arply not reachable</b> – you can still use the editor.' + httpsLink;
+  });
+}
+</script>
+</body>
+</html>
