@@ -1,5 +1,5 @@
 {
-  "version": "0.2.3",
+  "version": "0.2.4",
   "www": ["dsp.html","index.html","logs.html","overview.html","speedtest.html"],
   "builds": {"arply_v1": "arply_v1.bin", "arply_v1_usbdac": "arply_v1_usbdac.bin"}
 }
